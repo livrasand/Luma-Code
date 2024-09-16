@@ -1,0 +1,212 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    font-family: 'Fira Code', 'Courier New', monospace; /* Fuente diseñada para la codificación */
+    background-color: #f5f5f5; /* Fondo claro y neutro */
+    color: #333; /* Texto oscuro para buen contraste */
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    padding: 20px;
+    background-color: #fff; /* Fondo blanco para el contenedor principal */
+}
+
+/* Estilos del panel lateral */
+.file-panel {
+    flex: 1;
+    background-color: #f9f9f9; /* Fondo muy claro */
+    padding: 20px;
+    border-right: 1px solid #ddd; /* Línea de separación suave */
+}
+
+#file-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #555; /* Color de texto gris oscuro */
+}
+
+#file-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd; /* Línea de separación suave */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#file-list li:hover {
+    background-color: #e0e0e0; /* Fondo ligeramente gris claro al pasar el mouse */
+}
+
+#open-folder-btn {
+    background-color: #007aff; /* Azul claro de Apple */
+    border: none;
+    color: white;
+    padding: 12px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border-radius: 8px; /* Bordes redondeados */
+    transition: background-color 0.3s;
+}
+
+#open-folder-btn:hover {
+    background-color: #005a9e; /* Azul más oscuro al pasar el mouse */
+}
+
+/* Estilos del editor */
+.editor {
+    flex: 7;
+    padding: 20px;
+    background-color: #ffffff; /* Fondo blanco para una mejor lectura */
+    border-right: 1px solid #ddd; /* Línea de separación suave */
+    width: 100%;
+    height: 100%;
+}
+
+textarea#code-editor {
+    width: 100%;
+    height: 100%;
+    background-color: #fafafa; /* Fondo claro para el editor */
+    color: #333; /* Texto oscuro para buen contraste */
+    border: 1px solid #ddd;
+    outline: none;
+    padding: 15px;
+    font-size: 16px;
+    font-family: 'Fira Code', 'Courier New', monospace; /* Fuente de codificación */
+    resize: none;
+    box-sizing: border-box;
+    line-height: 1.6;
+    overflow: auto;
+}
+
+/* Área de chat */
+/* Estilos para el contenedor de chat */
+.chat {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #ffffff; /* Fondo blanco */
+    border-left: 1px solid #ddd; /* Línea de separación suave */
+}
+
+#chat-log {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f9f9f9; /* Fondo muy claro para el log */
+    border: 1px solid #ddd; /* Línea de separación suave */
+    color: #333; /* Texto oscuro para buen contraste */
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para mensajes de usuario y GPT */
+.chat-log p {
+    margin: 5px 0;
+}
+
+.chat-log p strong {
+    font-weight: bold;
+}
+
+.chat-log .user-message {
+    color: #1e90ff;
+}
+
+.chat-log .gpt-message {
+    background-color: #e9ecef;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+/* Estilos para bloques de código */
+.code-block {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    white-space: pre-wrap;
+    position: relative;
+}
+
+.code-block .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 3px;
+}
+
+#chat-input {
+    height: 50px;
+    background-color: #fafafa; /* Fondo claro */
+    color: #333; /* Texto oscuro */
+    border: 1px solid #ddd; /* Línea de separación suave */
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px; /* Bordes redondeados */
+    box-sizing: border-box;
+    line-height: 1.6;
+}
+
+#send-btn {
+    padding: 12px;
+    background-color: #007aff; /* Azul claro de Apple */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px; /* Bordes redondeados */
+    transition: background-color 0.3s;
+}
+
+#send-btn:hover {
+    background-color: #005a9e; /* Azul más oscuro al pasar el mouse */
+}
+
+/* Estilo de los mensajes */
+#chat-log p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+#chat-log strong {
+    color: #007aff; /* Azul claro para resaltar nombres */
+}
+
+/* styles.css */
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+.file-panel {
+    width: 20%;
+    overflow-y: auto;
+    border-right: 1px solid #ccc;
+}
+
+#code-editor {
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+

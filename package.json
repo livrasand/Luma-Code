@@ -1,0 +1,14 @@
+{
+  "name": "luma-code",
+  "version": "1.0.0",
+  "description": "Luma AI Code Editor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Livrädo Sandoval",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^32.1.0"
+  }
+}

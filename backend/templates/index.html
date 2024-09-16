@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luma Code</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.css">
+<!-- Tema opcional para el editor -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/theme/material.min.css">
+<!-- Autocompletado en CodeMirror -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/addon/hint/show-hint.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/addon/hint/show-hint.min.css">
+
+
+</head>
+<body>
+    <div class="container">
+        <div class="file-panel">
+            <button id="open-folder-btn">Abrir Carpeta</button>
+            <ul id="file-list"></ul>
+        </div>
+        <div class="editor">
+    <textarea id="code-editor" placeholder="Escribe tu código aquí..."></textarea>
+</div>
+
+        <div class="chat">
+            <div id="chat-log"></div>
+            <textarea id="chat-input" placeholder="Escribe aquí para interactuar con ChatGPT"></textarea>
+            <button id="send-btn">Enviar</button>
+        </div>
+    </div>
+
+    <!-- CodeMirror JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.js"></script>
+<!-- Módulos de lenguajes y funcionalidades adicionales -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/addon/edit/matchbrackets.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/htmlmixed/htmlmixed.min.js"></script>
+    <!-- Incluir el script externo -->
+    <script>
+        const { ipcRenderer } = require('electron');
+
+// Abre la carpeta seleccionada
+document.getElementById('open-folder-btn').addEventListener('click', () => {
+    ipcRenderer.send('open-folder-dialog');
+});
+
+// Función para crear un nodo en el árbol de archivos
+function createTreeNode(item) {
+    const li = document.createElement('li');
+    li.textContent = item.name;
+    li.classList.add(item.type);
+
+    if (item.type === 'directory') {
+        li.classList.add('directory');
+        li.style.cursor = 'pointer';
+
+        // Agregar un manejador de clics para expandir/colapsar el directorio
+        li.addEventListener('click', () => {
+            const children = li.querySelector('ul');
+            if (children) {
+                children.classList.toggle('hidden');
+            } else {
+                ipcRenderer.send('open-folder-dialog', { path: item.path });
+            }
+        });
+
+        const ul = document.createElement('ul');
+        ul.classList.add('hidden'); // Ocultar subdirectorios por defecto
+        li.appendChild(ul);
+    } else {
+        li.classList.add('file');
+        li.style.cursor = 'pointer';
+
+        // Agregar un manejador de clics para abrir archivos
+        li.addEventListener('click', () => {
+            ipcRenderer.send('open-file', item.path);
+        });
+    }
+
+    return li;
+}
+
+// Maneja la selección de la carpeta y muestra los archivos
+ipcRenderer.on('selected-directory', (event, data) => {
+    const fileList = document.getElementById('file-list');
+    fileList.innerHTML = '';
+
+    data.items.forEach(item => {
+        const treeNode = createTreeNode(item);
+        fileList.appendChild(treeNode);
+    });
+});
+
+// Muestra el contenido del archivo en el editor
+ipcRenderer.on('file-opened', (event, content) => {
+    document.getElementById('code-editor').value = content;
+});
+
+// Manejador para guardar el contenido del editor
+document.getElementById('send-btn').addEventListener('click', async () => {
+    const message = document.getElementById('chat-input').value;
+    const chatLog = document.getElementById('chat-log');
+
+    if (message.trim()) {
+        chatLog.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+        document.getElementById('chat-input').value = '';
+
+        try {
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: message }),
+            });
+
+            const data = await response.json();
+
+            if (data.response) {
+                chatLog.innerHTML += `<p><strong>GPT:</strong> ${data.response}</p>`;
+            } else if (data.error) {
+                chatLog.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
+            }
+        } catch (error) {
+            chatLog.innerHTML += `<p><strong>Error:</strong> No se pudo conectar con el servidor.</p>`;
+        }
+    }
+});
+
+// Atajo de teclado para guardar
+document.addEventListener('keydown', (event) => {
+    if (event.ctrlKey && event.key === 's') {
+        event.preventDefault();
+        const content = document.getElementById('code-editor').value;
+        ipcRenderer.send('save-file', { content, filePath: 'path-to-save-file' });
+    }
+});
+    </script>
+<script>
+    
+    var editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+        lineNumbers: true,
+        mode: "javascript", // Cambia a cualquier modo que necesites, como "python", "htmlmixed", etc.
+        theme: "material",
+        matchBrackets: true,
+        tabSize: 4,
+        indentWithTabs: true,
+        autoCloseBrackets: true,
+        autoCloseTags: true,
+        styleActiveLine: true, // Resalta la línea actual
+        foldGutter: true, // Permite plegar el código
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"] // Añade el gutter de plegado
+    });
+
+    // Cambio de modo dinámico
+    function changeMode(mode) {
+        editor.setOption("mode", mode);
+    }
+
+    // Maneja el cambio de modo según el archivo
+    ipcRenderer.on('file-opened', (event, { content, mode }) => {
+        editor.setValue(content);
+        changeMode(mode || "javascript"); // Cambia el modo según el archivo
+    });
+
+    editor.on("cursorActivity", function() {
+        var cursor = editor.getCursor();
+        console.log(`Línea: ${cursor.line + 1}, Columna: ${cursor.ch}`);
+    });
+</script>
+
+</body>
+</html>
