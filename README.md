@@ -1,4 +1,5 @@
 # **Luma Code - The AI Code Editor**
+![1](https://github.com/user-attachments/assets/77de282c-2276-4a93-9db1-abaa3de2ceb9)
 
 ### The editor that redefines what **intelligent** means.
 
