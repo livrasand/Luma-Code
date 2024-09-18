@@ -1,4 +1,5 @@
 # **Luma Code - The AI Code Editor**
+![1](https://github.com/user-attachments/assets/77de282c-2276-4a93-9db1-abaa3de2ceb9)
 
 ### The editor that redefines what **intelligent** means.
 
@@ -91,9 +92,7 @@ Luma Code is on its way, and you can be part of its **transformation**. It's not
 
 If you want to be part of the future of **Luma Code**, give the repository a "Star", **Fork** and let's make magic together.
 
-Aquí tienes las instrucciones en formato Markdown:
 
-```markdown
 # Running Luma Code Locally
 
 To get started with **Luma Code** on your local machine, follow these steps:
