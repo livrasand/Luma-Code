@@ -90,3 +90,72 @@ Luma Code is on its way, and you can be part of its **transformation**. It's not
 ---
 
 If you want to be part of the future of **Luma Code**, give the repository a "Star", **Fork** and let's make magic together.
+
+Aquí tienes las instrucciones en formato Markdown:
+
+```markdown
+# Running Luma Code Locally
+
+To get started with **Luma Code** on your local machine, follow these steps:
+
+## 1. Clone the Repository
+
+First, clone the Luma Code repository from GitHub:
+
+```bash
+git clone https://github.com/your-username/luma-code.git
+cd luma-code
+```
+
+## 2. Install Node.js Dependencies
+
+Navigate to the project directory and install the required Node.js dependencies:
+
+```bash
+npm install
+npm install --save-dev electron
+```
+
+## 3. Install Python Dependencies
+
+Make sure you have Python and `pip` installed. Then, install the Python dependencies using:
+
+```bash
+cd backend
+pip install -r requirements.txt
+```
+
+## 4. Configure Environment Variables
+
+Create a `.env` file in the `backend` directory with your OpenAI API key. The file should look like this:
+
+```
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+## 5. Start the Flask Server
+
+In a terminal, navigate to the `backend` directory and start the Flask server:
+
+```bash
+cd backend
+python app.py
+```
+
+## 6. Start the Electron Application
+
+Open another terminal window, navigate back to the root of your project directory, and start the Electron application:
+
+```bash
+npm start
+```
+
+If have a problems, start with this:
+
+```bash
+npx electron frontend/main.js
+```
+
+## 7. Access Luma Code
+
+Once Electron is running, it will launch **Luma Code** and should open in a new window. You can now interact with the application as intended.

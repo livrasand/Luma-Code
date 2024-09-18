@@ -1,14 +1,30 @@
 {
   "name": "luma-code",
-  "version": "1.0.0",
+  "productName": "Luma Code",
+  "version": "1.0.0-dev",
   "description": "Luma AI Code Editor",
-  "main": "index.js",
+  "main": "frontend/main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/livrasand/Luma-Code.git"
+  },
+  "bugs": {
+    "url": "https://github.com/livrasand/Luma-Code/issues"
+  },
   "scripts": {
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Livrädo Sandoval",
-  "license": "ISC",
-  "dependencies": {
+  "author": {
+    "name": "Livrädo Sandoval",
+    "email": "livrasand@outlook.com",
+    "url": "https://livrasand.github.io/"
+  },
+  "license": "MIT",
+  "devDependencies": {
     "electron": "^32.1.0"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.51.0"
   }
 }

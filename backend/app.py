@@ -1,7 +1,7 @@
 import os
 import openai
 from openai import OpenAI
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 
@@ -15,6 +15,10 @@ client = OpenAI()
 
 # Configurar la API Key de OpenAI
 client.api_key = os.getenv("OPENAI_API_KEY")
+
+@app.route('/node_modules/<path:filename>')
+def node_modules(filename):
+    return send_from_directory(os.path.join(app.root_path, '../node_modules'), filename)
 
 @app.route('/')
 def index():
@@ -63,6 +67,21 @@ def ask_gpt():
     except Exception as e:
         # Otros errores inesperados
         return jsonify({"error": str(e)}), 500
+
+@app.route('/list-directory', methods=['POST'])
+def list_directory():
+    data = request.get_json()
+    directory_path = data.get('directory')
+
+    if not directory_path:
+        return jsonify({'error': 'No directory path provided'}), 400
+
+    try:
+        # Obtiene la lista de archivos y directorios
+        items = [{'name': item} for item in os.listdir(directory_path)]
+        return jsonify({'items': items})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

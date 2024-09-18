@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
 * {
     box-sizing: border-box;
 }
@@ -6,50 +8,51 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Arial', sans-serif;
 }
 
 body {
-    font-family: 'Fira Code', 'Courier New', monospace; /* Fuente diseñada para la codificación */
-    background-color: #f5f5f5; /* Fondo claro y neutro */
-    color: #333; /* Texto oscuro para buen contraste */
+    background-color: #1e1e1e; /* Fondo oscuro de Atom */
+    color: #abb2bf; /* Texto claro */
+    font-style: normal;
+    font-family: "IBM Plex Sans", sans-serif;
 }
 
 .container {
     display: flex;
-    height: 100vh;
-    padding: 20px;
-    background-color: #fff; /* Fondo blanco para el contenedor principal */
+    height: 100%;
+    background-color: #1e1e1e; 
+    font-style: normal;
+    font-family: "IBM Plex Sans", sans-serif;
 }
 
 /* Estilos del panel lateral */
 .file-panel {
-    flex: 1;
-    background-color: #f9f9f9; /* Fondo muy claro */
+    flex: 2;
+    background-color: #252526; /* Fondo oscuro para el panel */
     padding: 20px;
-    border-right: 1px solid #ddd; /* Línea de separación suave */
+    border-right: 1px solid #3a3f4b; /* Línea de separación */
 }
 
 #file-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    color: #555; /* Color de texto gris oscuro */
+    color: #abb2bf; /* Texto claro */
 }
 
 #file-list li {
     padding: 10px 0;
-    border-bottom: 1px solid #ddd; /* Línea de separación suave */
+    border-bottom: 1px solid #3a3f4b; /* Línea de separación sutil */
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 #file-list li:hover {
-    background-color: #e0e0e0; /* Fondo ligeramente gris claro al pasar el mouse */
+    background-color: #3a3f4b; /* Fondo gris oscuro al pasar el mouse */
 }
 
 #open-folder-btn {
-    background-color: #007aff; /* Azul claro de Apple */
+    background-color: #2d2d2d; /* Amarillo suave de Atom */
     border: none;
     color: white;
     padding: 12px;
@@ -57,59 +60,70 @@ body {
     width: 100%;
     margin-bottom: 20px;
     font-size: 16px;
-    border-radius: 8px; /* Bordes redondeados */
+    border-radius: 5px; /* Bordes ligeramente redondeados */
     transition: background-color 0.3s;
+    font-style: normal;
+    font-family: "IBM Plex Sans", sans-serif;
 }
 
 #open-folder-btn:hover {
-    background-color: #005a9e; /* Azul más oscuro al pasar el mouse */
-}
-
-/* Estilos del editor */
-.editor {
-    flex: 7;
-    padding: 20px;
-    background-color: #ffffff; /* Fondo blanco para una mejor lectura */
-    border-right: 1px solid #ddd; /* Línea de separación suave */
-    width: 100%;
-    height: 100%;
-}
-
-textarea#code-editor {
-    width: 100%;
-    height: 100%;
-    background-color: #fafafa; /* Fondo claro para el editor */
-    color: #333; /* Texto oscuro para buen contraste */
-    border: 1px solid #ddd;
-    outline: none;
-    padding: 15px;
-    font-size: 16px;
-    font-family: 'Fira Code', 'Courier New', monospace; /* Fuente de codificación */
-    resize: none;
-    box-sizing: border-box;
-    line-height: 1.6;
-    overflow: auto;
+    background-color: #424242; /* Amarillo más oscuro en hover */
 }
 
 /* Área de chat */
-/* Estilos para el contenedor de chat */
 .chat {
     flex: 3;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-color: #ffffff; /* Fondo blanco */
-    border-left: 1px solid #ddd; /* Línea de separación suave */
+    background-color: #21252b; /* Fondo oscuro */
+    border-left: 1px solid #3a3f4b; /* Línea de separación */
+    font-style: normal;
+    font-family: "IBM Plex Sans", sans-serif;
 }
 
 #chat-log {
     flex: 1;
     overflow-y: auto;
-    background-color: #f9f9f9; /* Fondo muy claro para el log */
-    border: 1px solid #ddd; /* Línea de separación suave */
-    color: #333; /* Texto oscuro para buen contraste */
+    background: rgba(30, 33, 39, 0.7); /* Fondo con opacidad para el efecto de glass */
+    border: 1px solid rgba(58, 63, 75, 0.8); /* Borde con opacidad para el efecto de glass */
+    color: #abb2bf;
     padding: 15px;
     margin-bottom: 20px;
+    border-radius: 10px; /* Bordes redondeados opcionales */
+    position: relative; /* Necesario para el posicionamiento del pseudo-elemento */
+    backdrop-filter: blur(10px); /* Efecto de desenfoque del fondo */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Sombra suave para el efecto de glass */
+}
+
+/* Efecto de desenfoque y luz animada alrededor del borde */
+#chat-log::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 153, 255, 0.3), rgba(255, 0, 204, 0.3));
+    filter: blur(15px);
+    z-index: -1;
+    animation: pulse 4s infinite ease-in-out;
+    border-radius: 15px; /* Ajustar para que coincida con el border-radius del div */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.88);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
+    100% {
+        transform: scale(0.88);
+        opacity: 0.6;
+    }
 }
 
 /* Estilos para mensajes de usuario y GPT */
@@ -122,31 +136,32 @@ textarea#code-editor {
 }
 
 .chat-log .user-message {
-    color: #1e90ff;
+    color: #fff; /* Amarillo suave para el usuario */
 }
 
 .chat-log .gpt-message {
-    background-color: #e9ecef;
     padding: 8px;
     border-radius: 5px;
+    color: #fff;
 }
 
 /* Estilos para bloques de código */
 .code-block {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
+    background-color: #282c34;
+    border: 1px solid #3a3f4b;
     padding: 10px;
     border-radius: 5px;
     margin-top: 10px;
     white-space: pre-wrap;
     position: relative;
+    color: #e06c75; /* Rojo suave para bloques de código (como Atom) */
 }
 
 .code-block .copy-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #4CAF50;
+    background-color: #98c379; /* Verde Atom */
     color: white;
     border: none;
     padding: 5px;
@@ -157,28 +172,70 @@ textarea#code-editor {
 
 #chat-input {
     height: 50px;
-    background-color: #fafafa; /* Fondo claro */
-    color: #333; /* Texto oscuro */
-    border: 1px solid #ddd; /* Línea de separación suave */
+    background-color: #282c34;
+    color: #abb2bf;
     padding: 10px;
-    font-size: 16px;
-    border-radius: 8px; /* Bordes redondeados */
+    resize: none;
+    font-size: 14px;
     box-sizing: border-box;
     line-height: 1.6;
+    border: none; /* Sin borde por defecto */
+    outline: none; /* Eliminar el borde de enfoque predeterminado */
+    border-radius: 5px; /* Esquinas redondeadas */
+    position: relative;
+    z-index: 1; 
+    font-style: normal;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+/* Aplicar el borde con gradiente */
+.chat-input-wrapper {
+    display: inline-block;
+    position: relative;
+    border-radius: 5px; /* Esquinas redondeadas */
+    padding: 2px; /* Tamaño del borde gradiente */
+    background: linear-gradient(135deg, rgba(0, 153, 255, 0.3), rgba(255, 0, 204, 0.3));
+    background-size: 200% 200%; /* Para animar el gradiente */
+    animation: gradientBorder 3s ease infinite; /* Animación del gradiente */
+}
+
+/* Hacer que el input no ocupe todo el borde */
+.chat-input-wrapper textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 5px; /* Esquinas redondeadas dentro del borde */
+    background-color: #282c34; /* Color de fondo del textarea */
+    z-index: 1;
+}
+
+/* Animación del gradiente */
+@keyframes gradientBorder {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 #send-btn {
     padding: 12px;
-    background-color: #007aff; /* Azul claro de Apple */
+    background-color: #2d2d2d; /* Amarillo suave */
     color: white;
     border: none;
     cursor: pointer;
-    border-radius: 8px; /* Bordes redondeados */
+    border-radius: 5px;
     transition: background-color 0.3s;
+    font-style: normal;
+    font-family: "IBM Plex Sans", sans-serif;
 }
 
 #send-btn:hover {
-    background-color: #005a9e; /* Azul más oscuro al pasar el mouse */
+    background-color: #424242; /* Amarillo más oscuro en hover */
 }
 
 /* Estilo de los mensajes */
@@ -188,25 +245,5 @@ textarea#code-editor {
 }
 
 #chat-log strong {
-    color: #007aff; /* Azul claro para resaltar nombres */
+    color: #e5c07b; /* Amarillo suave para resaltar nombres */
 }
-
-/* styles.css */
-.container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-}
-
-.file-panel {
-    width: 20%;
-    overflow-y: auto;
-    border-right: 1px solid #ccc;
-}
-
-#code-editor {
-    height: 100%;
-    width: 100%;
-    border: none;
-}
-
