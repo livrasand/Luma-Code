@@ -3,10 +3,11 @@ const path = require('path');
 const { exec } = require('child_process');
 const http = require('http');
 
+let mainWindow;
 let flaskProcess;
 
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 600,
     webPreferences: {
@@ -16,12 +17,13 @@ function createWindow() {
     },
   });
 
-  win.loadURL('http://localhost:5000');
+  mainWindow.loadURL('http://localhost:5000');
 
-  win.on('closed', () => {
+  mainWindow.on('closed', () => {
     if (flaskProcess) {
       flaskProcess.kill('SIGINT');
     }
+    mainWindow = null;  // Asegúrate de limpiar mainWindow cuando se cierre
   });
 }
 
@@ -75,12 +77,6 @@ app.whenReady().then(() => {
   checkServer().then(() => {
     createWindow();
 
-     ipcMain.handle('select-directory', async () => {
-        const result = await dialog.showOpenDialog({
-            properties: ['openDirectory']
-        });
-        return result.filePaths[0];
-    });
   }).catch((err) => {
     console.error('No se pudo conectar al servidor Flask:', err.message);
     app.quit();
@@ -95,4 +91,14 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
+});
+
+// Maneja la solicitud del frontend para seleccionar un directorio
+ipcMain.handle('select-directory', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory']
+  });
+  if (!result.canceled) {
+    return result.filePaths[0];  // Devuelve el directorio seleccionado
+  }
 });

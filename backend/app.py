@@ -4,6 +4,8 @@ from openai import OpenAI
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
+import tkinter as tk
+from tkinter import filedialog
 
 # Cargar las variables de entorno
 load_dotenv()
@@ -71,17 +73,41 @@ def ask_gpt():
 @app.route('/list-directory', methods=['POST'])
 def list_directory():
     data = request.get_json()
-    directory_path = data.get('directory')
+    directory = data.get('directory')
 
-    if not directory_path:
-        return jsonify({'error': 'No directory path provided'}), 400
+    if not os.path.isdir(directory):
+        return jsonify(error="Directorio no válido"), 400
 
     try:
-        # Obtiene la lista de archivos y directorios
-        items = [{'name': item} for item in os.listdir(directory_path)]
-        return jsonify({'items': items})
+        items = []
+        for entry in os.scandir(directory):
+            items.append({
+                'name': entry.name,
+                'path': entry.path,
+                'is_dir': entry.is_dir()
+            })
+        return jsonify(items=items), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify(error=str(e)), 500
+
+@app.route('/read-file', methods=['POST'])
+def read_file():
+    data = request.get_json()
+    file_path = data.get('path')
+
+    if not os.path.isfile(file_path):
+        return jsonify(error="Archivo no válido"), 400
+
+    try:
+        # Intentar leer el archivo usando utf-8 y manejar los errores de codificación
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as file:
+            content = file.read()
+        return jsonify(content=content), 200
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

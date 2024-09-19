@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <title>Luma Code</title>
     <link rel="stylesheet" href="/static/styles.css">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container">
@@ -17,19 +18,22 @@
         <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
 
 <script>
+    let editor;  // Hacer que editor sea accesible globalmente
+
     require.config({ paths: { vs: '/node_modules/monaco-editor/min/vs' } });
 
     require(['vs/editor/editor.main'], function () {
-        var editor = monaco.editor.create(document.getElementById('editor'), {
-            value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-            language: 'javascript',
+        editor = monaco.editor.create(document.getElementById('editor'), {
+            
+            language: 'python',
             theme: 'vs-dark',
-            fontSize: 17, 
-            fontWeight: '400',
+            fontSize: 18,
+            fontWeight: '500',
             lineHeight: 1.7
         });
     });
 </script>
+
 
        <div class="chat">
     <div id="chat-log"></div>
@@ -42,64 +46,245 @@
 
 
     </div>
-    <!-- Incluir el script externo -->
     <script>
-       document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
             const { ipcRenderer } = window;
 
             document.getElementById('open-folder-btn').addEventListener('click', () => {
-                ipcRenderer.invoke('select-directory').then(directoryPath => {
+                    ipcRenderer.invoke('select-directory')
+                        .then(directoryPath => {
+                            if (directoryPath) {
+                                fetch('/list-directory', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ directory: directoryPath })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    const fileList = document.getElementById('file-list');
+                                    fileList.innerHTML = '';
+                                    if (data.items) {
+                                        data.items.forEach(item => {
+                                            const li = document.createElement('li');
+                                            li.textContent = item.name;
+                                            li.dataset.path = item.path; // Guarda la ruta del archivo o carpeta
+                                            li.addEventListener('click', () => {
+                                                if (item.is_dir) {
+                                                    loadDirectory(item.path, li);  // Cargar el contenido de la carpeta
+                                                } else {
+                                                    loadFile(item.path);  // Cargar el archivo en el editor
+                                                }
+                                            });
+                                            fileList.appendChild(li);
+                                        });
+                                    } else if (data.error) {
+                                        fileList.innerHTML = `<li>Error: ${data.error}</li>`;
+                                    }
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error al seleccionar el directorio:', error);
+                        });
+                });
+
+                // Función para cargar subdirectorios
+                function loadDirectory(path, liElement) {
                     fetch('/list-directory', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ directory: directoryPath }),
-                    }).then(response => response.json())
-                      .then(data => {
-                          const fileList = document.getElementById('file-list');
-                          fileList.innerHTML = '';
-                          if (data.items) {
-                              data.items.forEach(item => {
-                                  const li = document.createElement('li');
-                                  li.textContent = item.name;
-                                  fileList.appendChild(li);
-                              });
-                          } else if (data.error) {
-                              fileList.innerHTML = `<li>Error: ${data.error}</li>`;
-                          }
-                      });
-                }).catch(error => {
-                    console.error('Error selecting directory:', error);
-                });
-            });
-
-            document.getElementById('send-btn').addEventListener('click', async () => {
-                const message = document.getElementById('chat-input').value;
-                const chatLog = document.getElementById('chat-log');
-
-                if (message.trim()) {
-                    chatLog.innerHTML += `<p><strong class="user-message">You:</strong> ${message}</p>`;
-                    document.getElementById('chat-input').value = '';
-
-                    try {
-                        const response = await fetch('/ask', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ prompt: message }),
+                        body: JSON.stringify({ directory: path })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const ul = document.createElement('ul');
+                        data.items.forEach(item => {
+                            const subLi = document.createElement('li');
+                            subLi.textContent = item.name;
+                            subLi.dataset.path = item.path; // Guarda la ruta del archivo o carpeta
+                            subLi.addEventListener('click', (e) => {
+                                e.stopPropagation(); // Evita que se propague el evento al padre
+                                if (item.is_dir) {
+                                    loadDirectory(item.path, subLi);  // Cargar la carpeta
+                                } else {
+                                    loadFile(item.path);  // Cargar el archivo
+                                }
+                            });
+                            ul.appendChild(subLi);
                         });
-
-                        const data = await response.json();
-
-                        if (data.response) {
-                            chatLog.innerHTML += `<p><strong class="gpt-message">Luma:</strong> ${data.response}</p>`;
-                        } else if (data.error) {
-                            chatLog.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
-                        }
-                    } catch (error) {
-                        chatLog.innerHTML += `<p><strong>Error:</strong> No se pudo conectar con el servidor.</p>`;
-                    }
+                        liElement.appendChild(ul);  // Añadir la lista de subdirectorios al elemento actual
+                    });
                 }
-            });
+
+                // Función para cargar el contenido de un archivo en el editor
+                function loadFile(path) {
+                    fetch('/read-file', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ path })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.content) {
+                            editor.setValue(data.content);
+                            editor.updateOptions({ language: getFileLanguage(path) });
+                        } else if (data.error) {
+                            console.error('Error al cargar el archivo:', data.error);
+                        }
+                    });
+                }
+
+                // Función para determinar el lenguaje del archivo basado en la extensión
+                function getFileLanguage(path) {
+                    if (path.endsWith('.js')) return 'javascript';
+                    if (path.endsWith('.py')) return 'python';
+                    if (path.endsWith('.html')) return 'html';
+                    if (path.endsWith('.css')) return 'css';
+                    return 'plaintext';
+                }
         });
+        </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+    const { ipcRenderer } = window;
+
+    document.getElementById('send-btn').addEventListener('click', async () => {
+        const message = document.getElementById('chat-input').value;
+        const chatLog = document.getElementById('chat-log');
+
+        if (message.trim()) {
+            // Agregar el mensaje del usuario al chat
+            chatLog.innerHTML += `<p><strong class="user-message">You:</strong> ${escapeHTML(message)}</p>`;
+            document.getElementById('chat-input').value = ''; // Limpiar el input
+
+            try {
+                // Enviar el mensaje al servidor
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: message }),
+                });
+
+                const data = await response.json();
+
+                if (data.response) {
+                    let formattedResponse = escapeHTML(data.response);
+
+                    // Detectar y formatear bloques de código con tres backticks ```...```
+                    formattedResponse = formattedResponse.replace(/```([a-zA-Z]*)([\s\S]*?)```/g, (match, lang, code) => {
+                        const language = lang || 'plaintext'; // Si no hay lenguaje, usar texto plano
+                        const escapedCode = escapeHTML(code);
+
+                        return `
+                            <div class="code-block">
+                                <pre><code class="language-${escapeHTML(language)}">${escapedCode}</code></pre>
+                                <button class="copy-btn">Copiar</button>
+                                <button class="run-btn">Run</button>
+                            </div>`;
+                    });
+
+
+                    // Detectar y formatear código inline con un backtick `
+                    formattedResponse = formattedResponse.replace(/`([^`]+)`/g, (match, code) => {
+                        return `<code class="inline-code">${escapeHTML(code)}</code>`;
+                    });
+
+                    // Formatear encabezados markdown
+                    formattedResponse = formattedResponse.replace(/(^|\n)### (.*?)(\n|$)/g, '<h3>$2</h3>');
+                    formattedResponse = formattedResponse.replace(/(^|\n)## (.*?)(\n|$)/g, '<h2>$2</h2>');
+                    formattedResponse = formattedResponse.replace(/(^|\n)# (.*?)(\n|$)/g, '<h1>$2</h1>');
+
+                    // Convertir enlaces markdown [texto](url)
+                    formattedResponse = formattedResponse.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+                    // Agregar la respuesta de ChatGPT al chat
+                    chatLog.innerHTML += `<p><strong class="gpt-message">Luma:</strong> ${formattedResponse}</p>`;
+                    Prism.highlightAll(); // Aplicar resaltado de sintaxis
+                } else if (data.error) {
+                    chatLog.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
+                }
+            } catch (error) {
+                chatLog.innerHTML += `<p><strong>Error:</strong> No se pudo conectar con el servidor.</p>`;
+            }
+        }
+    });
+
+    // Función para escapar caracteres HTML
+    function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, (tag) => {
+        const charsToReplace = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        };
+        return charsToReplace[tag] || tag;
+    });
+}
+});
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+    <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+    const chatLog = document.getElementById('chat-log');
+
+    chatLog.addEventListener('click', (event) => {
+        if (event.target.classList.contains('copy-btn')) {
+            // Botón de copiar
+            const codeBlock = event.target.closest('.code-block').querySelector('pre code'); // Obtener el <code> dentro del bloque
+            let code = codeBlock.textContent;
+
+            // Convertir entidades HTML a caracteres normales
+            code = unescapeHTML(code);
+
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Código copiado al portapapeles');
+            }).catch(err => {
+                console.error('Error al copiar el código:', err);
+            });
+
+        } else if (event.target.classList.contains('run-btn')) {
+            // Botón de ejecutar
+            const codeBlock = event.target.closest('.code-block').querySelector('pre code'); // Obtener el <code> dentro del bloque
+            let code = codeBlock.textContent;
+
+            // Convertir entidades HTML a caracteres normales
+            code = unescapeHTML(code);
+
+            // Insertar el código en el editor de Monaco
+            if (window.editor) {
+                const position = editor.getPosition(); // Obtener la posición actual del cursor
+
+                if (position) {
+                    // Insertar el código en la posición actual del cursor
+                    editor.executeEdits('', [{
+                        range: new monaco.Range(position.lineNumber, 1, position.lineNumber, 1),
+                        text: code,
+                        forceMoveMarkers: true
+                    }]);
+                } else {
+                    // Si no hay una posición previa, insertar el código en la línea 1
+                    editor.setValue(code);
+                }
+            }
+        }
+    });
+
+    // Función para convertir entidades HTML a caracteres normales
+    function unescapeHTML(str) {
+        const map = {
+            '&amp;': '&',
+            '&lt;': '<',
+            '&gt;': '>',
+            '&#39;': "'",
+            '&quot;': '"'
+        };
+        return str.replace(/&amp;|&lt;|&gt;|&#39;|&quot;/g, (matched) => map[matched]);
+    }
+});
+
     </script>
 </body>
 </html>
