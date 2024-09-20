@@ -1,4 +1,4 @@
-# <img src="https://github.com/user-attachments/assets/77de282c-2276-4a93-9db1-abaa3de2ceb9" width="30"> **[Luma Code - The AI Code Editor]()**
+# <img src="https://github.com/user-attachments/assets/77de282c-2276-4a93-9db1-abaa3de2ceb9" width="30"> **[Luma Code - The First Self-Programming AI Code Editor]()**
 
 ![Captura de pantalla (461)](https://github.com/user-attachments/assets/f29202d6-a643-4521-b489-58910feda728)
 
