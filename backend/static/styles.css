@@ -1,26 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import '@fluentui/svg-icons/css/fluent-system-icons.css';
+
 
 * {
     box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     height: 100%;
+    width: 100%;
 }
 
 body {
-    background-color: #1e1e1e; /* Fondo oscuro de Atom */
-    color: #abb2bf; /* Texto claro */
+    background-color: #1e1e1e;
+    /* Fondo oscuro de Atom */
+    color: #abb2bf;
+    /* Texto claro */
     font-style: normal;
     font-family: "IBM Plex Sans", sans-serif;
 }
 
 .container {
+    flex: 1;
     display: flex;
     height: 100%;
-    background-color: #1e1e1e; 
+    background-color: #1e1e1e;
     font-style: normal;
     font-family: "IBM Plex Sans", sans-serif;
 }
@@ -28,58 +35,54 @@ body {
 /* Estilos del panel lateral */
 .file-panel {
     flex: 2;
-    background-color: #252526; /* Fondo oscuro para el panel */
-    padding: 20px;
-    border-right: 1px solid #3a3f4b; /* Línea de separación */
+    overflow-y: auto;
+    background-color: rgba(37, 37, 38, 0.7);
+    /* Fondo oscuro con opacidad para efecto glass */
+    padding: 10px;
+    border-right: 1.5px solid #000;
+    /* Línea de separación */
+    backdrop-filter: blur(10px);
+    /* Efecto vidrio */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    /* Sombra suave */
+    flex-shrink: 0;
+
 }
 
-#file-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    color: #abb2bf; /* Texto claro */
+.tree {
+    list-style-type: none;
+    padding-left: 10px;
 }
 
-#file-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid #3a3f4b; /* Línea de separación sutil */
+.tree li {
+    padding: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-#file-list li:hover {
-    background-color: #3a3f4b; /* Fondo gris oscuro al pasar el mouse */
+.tree li:hover {
+    background-color: #2a2a2a;
 }
-
-.file-panel ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .file-panel li {
-            cursor: pointer;
-            padding: 5px;
-        }
-        .file-panel li:hover {
-            background-color: #ddd;
-        }
 
 #open-folder-btn {
-    background-color: #2d2d2d; /* Amarillo suave de Atom */
+    background-color: #2d2d2d;
+    /* Amarillo suave de Atom */
     border: none;
     color: white;
-    padding: 12px;
+    padding: 8px 15px;
     cursor: pointer;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 16px;
-    border-radius: 5px; /* Bordes ligeramente redondeados */
+    border-radius: 5px;
+    /* Bordes ligeramente redondeados */
     transition: background-color 0.3s;
     font-style: normal;
     font-family: "IBM Plex Sans", sans-serif;
 }
 
 #open-folder-btn:hover {
-    background-color: #424242; /* Amarillo más oscuro en hover */
+    background-color: #424242;
+    /* Amarillo más oscuro en hover */
 }
 
 /* Área de chat */
@@ -88,26 +91,35 @@ body {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-color: #21252b; /* Fondo oscuro */
-    border-left: 1px solid #3a3f4b; /* Línea de separación */
+    background-color: #21252b;
+    /* Fondo oscuro */
+    border-left: 1px solid #3a3f4b;
+    /* Línea de separación */
     font-style: normal;
     font-family: "IBM Plex Sans", sans-serif;
+    line-height: 1.5;
     max-width: 30%;
 }
 
 #chat-log {
     flex: 1;
     overflow-y: auto;
-    background: rgba(30, 33, 39, 0.7); /* Fondo con opacidad para el efecto de glass */
-    border: 1px solid rgba(58, 63, 75, 0.8); /* Borde con opacidad para el efecto de glass */
+    background: rgba(30, 33, 39, 0.7);
+    /* Fondo con opacidad para el efecto de glass */
+    border: 1px solid rgba(58, 63, 75, 0.8);
+    /* Borde con opacidad para el efecto de glass */
     color: #abb2bf;
     word-wrap: break-word;
     padding: 15px;
     margin-bottom: 20px;
-    border-radius: 10px; /* Bordes redondeados opcionales */
-    position: relative; /* Necesario para el posicionamiento del pseudo-elemento */
-    backdrop-filter: blur(10px); /* Efecto de desenfoque del fondo */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Sombra suave para el efecto de glass */
+    border-radius: 10px;
+    /* Bordes redondeados opcionales */
+    position: relative;
+    /* Necesario para el posicionamiento del pseudo-elemento */
+    backdrop-filter: blur(10px);
+    /* Efecto de desenfoque del fondo */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    /* Sombra suave para el efecto de glass */
 }
 
 /* Efecto de desenfoque y luz animada alrededor del borde */
@@ -122,7 +134,8 @@ body {
     filter: blur(15px);
     z-index: -1;
     animation: pulse 4s infinite ease-in-out;
-    border-radius: 15px; /* Ajustar para que coincida con el border-radius del div */
+    border-radius: 15px;
+    /* Ajustar para que coincida con el border-radius del div */
 }
 
 @keyframes pulse {
@@ -130,10 +143,12 @@ body {
         transform: scale(0.88);
         opacity: 0.6;
     }
+
     50% {
         transform: scale(1);
         opacity: 0.4;
     }
+
     100% {
         transform: scale(0.88);
         opacity: 0.6;
@@ -150,7 +165,21 @@ body {
 }
 
 .chat-log .user-message {
-    color: #fff; /* Amarillo suave para el usuario */
+    color: #fff;
+    /* Amarillo suave para el usuario */
+}
+
+.input-hint {
+    margin: 5px;
+    font-size: 12px;
+    color: #abb2bf;
+}
+
+.hint-enter, .hint-shift-enter {
+    padding: 2px 6px;
+    background-color: #abb2bf;
+    color: #2d2d2d;
+    border-radius: 3px;
 }
 
 .chat-log .gpt-message {
@@ -168,11 +197,14 @@ body {
     font-size: 14px;
     box-sizing: border-box;
     line-height: 1.6;
-    border: none; /* Sin borde por defecto */
-    outline: none; /* Eliminar el borde de enfoque predeterminado */
-    border-radius: 5px; /* Esquinas redondeadas */
+    border: none;
+    /* Sin borde por defecto */
+    outline: none;
+    /* Eliminar el borde de enfoque predeterminado */
+    border-radius: 5px;
+    /* Esquinas redondeadas */
     position: relative;
-    z-index: 1; 
+    z-index: 1;
     font-style: normal;
     font-family: "IBM Plex Sans", sans-serif;
 }
@@ -181,20 +213,29 @@ body {
 .chat-input-wrapper {
     display: inline-block;
     position: relative;
-    border-radius: 5px; /* Esquinas redondeadas */
-    padding: 2px; /* Tamaño del borde gradiente */
+    border-radius: 5px;
+    margin-bottom:20px;
+    /* Esquinas redondeadas */
+    padding: 2px;
+    /* Tamaño del borde gradiente */
     background: linear-gradient(135deg, rgba(0, 153, 255, 0.3), rgba(255, 0, 204, 0.3));
-    background-size: 200% 200%; /* Para animar el gradiente */
-    animation: gradientBorder 3s ease infinite; /* Animación del gradiente */
+    background-size: 200% 200%;
+    /* Para animar el gradiente */
+    animation: gradientBorder 3s ease infinite;
+    /* Animación del gradiente */
 }
+
+
 
 /* Hacer que el input no ocupe todo el borde */
 .chat-input-wrapper textarea {
     width: 100%;
     height: 100%;
     border: none;
-    border-radius: 5px; /* Esquinas redondeadas dentro del borde */
-    background-color: #282c34; /* Color de fondo del textarea */
+    border-radius: 5px;
+    /* Esquinas redondeadas dentro del borde */
+    background-color: #282c34;
+    /* Color de fondo del textarea */
     z-index: 1;
 }
 
@@ -203,9 +244,11 @@ body {
     0% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
+
     100% {
         background-position: 0% 50%;
     }
@@ -213,7 +256,8 @@ body {
 
 #send-btn {
     padding: 12px;
-    background-color: #2d2d2d; /* Amarillo suave */
+    background-color: #2d2d2d;
+    /* Amarillo suave */
     color: white;
     border: none;
     cursor: pointer;
@@ -224,7 +268,8 @@ body {
 }
 
 #send-btn:hover {
-    background-color: #424242; /* Amarillo más oscuro en hover */
+    background-color: #424242;
+    /* Amarillo más oscuro en hover */
 }
 
 /* Estilo de los mensajes */
@@ -234,7 +279,8 @@ body {
 }
 
 #chat-log strong {
-    color: #e5c07b; /* Amarillo suave para resaltar nombres */
+    color: #e5c07b;
+    /* Amarillo suave para resaltar nombres */
 }
 
 pre {
@@ -242,33 +288,43 @@ pre {
     padding: 10px;
     border-radius: 5px;
     overflow-x: auto;
-    white-space: pre-wrap; /* Permite que el texto se ajuste dentro del contenedor */
+    white-space: pre-wrap;
+    /* Permite que el texto se ajuste dentro del contenedor */
     word-wrap: break-word;
 }
 
 code {
     color: #61dafb;
     font-family: Consolas, "Courier New", monospace;
-    white-space: pre-wrap; /* Permite que el texto se ajuste dentro del contenedor */
+    white-space: pre-wrap;
+    /* Permite que el texto se ajuste dentro del contenedor */
     word-wrap: break-word;
 }
 
 .inline-code {
-    background: rgba(255, 255, 255, 0.15); /* Fondo semitransparente */
-    padding: 4px 6px;
+    background: rgba(255, 255, 255, 0.15);
+    /* Fondo semitransparente */
+    padding: 2px 6px;
     font-family: monospace;
     border-radius: 6px;
-    backdrop-filter: blur(6px); /* Desenfoque para el efecto de vidrio */
-    -webkit-backdrop-filter: blur(6px); /* Compatibilidad con navegadores WebKit */
-    color: #f0f0f0; /* Color de texto blanco suave */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra ligera para dar profundidad */
+    backdrop-filter: blur(6px);
+    /* Desenfoque para el efecto de vidrio */
+    -webkit-backdrop-filter: blur(6px);
+    /* Compatibilidad con navegadores WebKit */
+    color: #f0f0f0;
+    /* Color de texto blanco suave */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Borde sutil */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* Sombra ligera para dar profundidad */
     transition: background 0.3s ease, color 0.3s ease;
 }
 
 .inline-code:hover {
-    background: rgba(255, 255, 255, 0.25); /* Hacer el fondo más brillante al pasar el mouse */
-    color: #ffffff; /* Cambiar el color del texto a blanco puro en hover */
+    background: rgba(255, 255, 255, 0.25);
+    /* Hacer el fondo más brillante al pasar el mouse */
+    color: #ffffff;
+    /* Cambiar el color del texto a blanco puro en hover */
 }
 
 .code-block {
@@ -276,20 +332,32 @@ code {
     margin-bottom: 20px;
 }
 
-.copy-btn, .run-btn {
+.copy-btn,
+.run-btn {
     position: absolute;
-    padding: 8px 16px;
-    font-size: 12px;
+    padding: 4px 16px;
+    font-size: 10px;
     cursor: pointer;
     border: none;
     right: 10px;
     top: 10px;
+    margin-bottom: 10px;
     margin-left: 5px;
-    border-radius: 8px;
+    border-radius: 4px;
     font-weight: bold;
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.1); /* Fondo translúcido */
-    backdrop-filter: blur(8px); /* Efecto de vidrio */
+    background: rgba(255, 255, 255, 0.1);
+    /* Fondo translúcido */
+    backdrop-filter: blur(6px);
+    /* Desenfoque para el efecto de vidrio */
+    -webkit-backdrop-filter: blur(6px);
+    /* Compatibilidad con navegadores WebKit */
+    color: #f0f0f0;
+    /* Color de texto blanco suave */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Borde sutil */
+    /* Sombra ligera para dar profundidad */
+    transition: background 0.3s ease, color 0.3s ease;
     -webkit-backdrop-filter: blur(8px);
     transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -303,18 +371,24 @@ code {
     right: 10px;
 }
 
-.copy-btn:hover, .run-btn:hover {
-    background: rgba(255, 255, 255, 0.3); /* Fondo más brillante al hacer hover */
-    transform: translateY(-2px); /* Pequeño desplazamiento hacia arriba al pasar el mouse */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Mayor sombra al hacer hover */
+.copy-btn:hover,
+.run-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    /* Fondo más brillante al hacer hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Mayor sombra al hacer hover */
 }
 
-.copy-btn:active, .run-btn:active {
-    transform: translateY(0); /* Efecto de clic */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Reducir sombra al hacer clic */
+.copy-btn:active,
+.run-btn:active {
+    transform: translateY(0);
+    /* Efecto de clic */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Reducir sombra al hacer clic */
 }
 
-.copy-btn::before, .run-btn::before {
+.copy-btn::before,
+.run-btn::before {
     content: '';
     position: absolute;
     top: 0;
@@ -328,15 +402,88 @@ code {
     pointer-events: none;
 }
 
-.copy-btn:hover::before, .run-btn:hover::before {
-    opacity: 1; /* Activar el gradiente de luz al hacer hover */
+.copy-btn:hover::before,
+.run-btn:hover::before {
+    opacity: 1;
+    /* Activar el gradiente de luz al hacer hover */
 }
 
 .copy-btn {
-    background: rgba(255, 255, 255, 0.15); /* Fondo semitransparente */
+    background: rgba(255, 255, 255, 0.15);
+    /* Fondo semitransparente */
 }
 
 .run-btn {
-    background: rgba(255, 255, 255, 0.15); /* Fondo semitransparente */
+    background: rgba(255, 255, 255, 0.15);
+    /* Fondo semitransparente */
+}
+
+/* Estilos del scrollbar */
+::webkit-scrollbar {
+    width: 8px;
+    /* Ancho del scrollbar */
+}
+
+/* Fondo del scrollbar */
+::webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    /* Fondo semitransparente para el track */
+    border-radius: 10px;
+    /* Esquinas redondeadas */
+}
+
+/* Estilo del thumb (parte que se mueve) */
+::webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+    /* Color del thumb con transparencia */
+    border-radius: 10px;
+    /* Esquinas redondeadas */
+}
+
+/* Efecto hover en el thumb */
+::webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+    /* Color del thumb al pasar el mouse */
+}
+
+/* Aplicar estilos de scrollbar a contenedores específicos */
+.file-panel,
+#chat-log, #chat-input {
+    scrollbar-width: thin;
+    /* Para Firefox: scrollbar delgado */
+    scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.1);
+    /* Color del thumb y track */
+}
+
+
+#status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 25px;
+    background-color: #1e1e1e;
+    border-top: 1px solid #3a3f4b;
+    color: white;
+    padding: 0 10px;
+    font-size: 12px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.status-left, .status-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#vault-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    flex-grow: 1;  /* Permite que el botón ocupe todo el espacio disponible */
+    padding: 0 10px; /* Mantiene el padding interno del botón */
 }
 

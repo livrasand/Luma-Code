@@ -25,6 +25,7 @@
     "electron": "^32.1.0"
   },
   "dependencies": {
+    "@fluentui/svg-icons": "^1.1.258",
     "marked": "^14.1.2",
     "monaco-editor": "^0.51.0"
   }

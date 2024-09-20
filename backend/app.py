@@ -43,6 +43,7 @@ def ask_gpt():
                 }
             ],
             model="gpt-4o-mini",
+            # use gpt-4o-mini or gpt-4o
         )
 
         # Access the answer using the updated method
@@ -106,8 +107,21 @@ def read_file():
     except Exception as e:
         return jsonify(error=str(e)), 500
 
+@app.route('/save-file', methods=['POST'])
+def save_file():
+    data = request.get_json()
+    file_path = data.get('path')
+    file_content = data.get('content')
 
+    if not file_path or not file_content:
+        return jsonify({'error': 'Ruta o contenido inválido'}), 400
 
+    try:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(file_content)
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
