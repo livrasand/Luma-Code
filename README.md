@@ -1,6 +1,6 @@
 # <img src="https://github.com/user-attachments/assets/77de282c-2276-4a93-9db1-abaa3de2ceb9" width="30"> **[Luma Code - The First Self-Programming AI Code Editor]()**
 
-![Captura de pantalla (461)](https://github.com/user-attachments/assets/f29202d6-a643-4521-b489-58910feda728)
+![Captura de pantalla (463)](https://github.com/user-attachments/assets/4d185fee-af53-4d61-8091-9a5d66b6aebd)
 
 ### The future of code editing, powered by AI & well-being 
 
