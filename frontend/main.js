@@ -7,6 +7,7 @@ let mainWindow;
 let flaskProcess;
 
 function createWindow() {
+  console.log("Creando ventana principal...");
   mainWindow = new BrowserWindow({
     width: 900,
     height: 600,
@@ -17,20 +18,26 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadURL('http://localhost:5000');
+  mainWindow.loadURL('http://localhost:65535');
+  console.log("Cargando URL http://localhost:65535...");
 
   mainWindow.on('closed', () => {
     if (flaskProcess) {
-      flaskProcess.kill('SIGINT');
+      console.log("Cerrando proceso Flask...");
+      flaskProcess.kill();
     }
-    mainWindow = null;  // Asegúrate de limpiar mainWindow cuando se cierre
+    mainWindow = null;
+    console.log("Ventana principal cerrada.");
   });
 }
 
+
 function startFlask() {
-  flaskProcess = exec('python ../backend/app.py', { cwd: path.join(__dirname, '../backend') }, (err, stdout, stderr) => {
+  console.log("Iniciando el servidor Flask...");
+  flaskProcess = exec('python app.py', { cwd: path.join(__dirname, '../backend') }, (err, stdout, stderr) => {
     if (err) {
       console.error(`Error al iniciar Flask: ${err.message}`);
+      console.error(stderr);
       return;
     }
     console.log(`Flask iniciado: ${stdout}`);
@@ -39,31 +46,40 @@ function startFlask() {
   flaskProcess.on('error', (err) => {
     console.error(`Error en el proceso de Flask: ${err.message}`);
   });
+
+  flaskProcess.on('exit', (code, signal) => {
+    console.log(`El proceso de Flask se cerro con el codigo: ${code} y la senal: ${signal}`);
+  });
 }
 
-function checkServer(retries = 10) {
+
+function checkServer(retries = 20, delay = 5000) {
   const options = {
     host: 'localhost',
-    port: 5000,
+    port: 65535,
     timeout: 1000,
   };
 
   return new Promise((resolve, reject) => {
     const req = http.request(options, (res) => {
       if (res.statusCode === 200) {
+        console.log("Servidor Flask esta disponible.");
         resolve();
       } else {
-        reject();
+        reject(new Error(`Status Code: ${res.statusCode}`));
       }
     });
 
-    req.on('error', () => {
+    req.on('error', (error) => {
+      console.error(`Error en la solicitud HTTP: ${error.message}`);
       if (retries === 0) {
-        reject(new Error('El servidor Flask no está disponible.'));
+        console.log("No quedan reintentos.");
+        reject(new Error('El servidor Flask no esta disponible.'));
       } else {
         setTimeout(() => {
-          checkServer(retries - 1).then(resolve).catch(reject);
-        }, 1000);
+          console.log(`Reintentando. Intentos restantes: ${retries}`);
+          checkServer(retries - 1, delay).then(resolve).catch(reject);
+        }, delay);
       }
     });
 
@@ -73,14 +89,14 @@ function checkServer(retries = 10) {
 
 app.whenReady().then(() => {
   startFlask();
-
-  checkServer().then(() => {
-    createWindow();
-
-  }).catch((err) => {
-    console.error('No se pudo conectar al servidor Flask:', err.message);
-    app.quit();
-  });
+  setTimeout(() => {
+    checkServer().then(() => {
+      createWindow();
+    }).catch((err) => {
+      console.error('No se pudo conectar al servidor Flask:', err.message);
+      app.quit();
+    });
+  }, 5000); // Espera 5 segundos antes de comenzar a verificar
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -99,6 +115,6 @@ ipcMain.handle('select-directory', async () => {
     properties: ['openDirectory']
   });
   if (!result.canceled) {
-    return result.filePaths[0];  // Devuelve el directorio seleccionado
+    return result.filePaths[0];
   }
 });

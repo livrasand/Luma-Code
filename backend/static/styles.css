@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
-@import '@fluentui/svg-icons/css/fluent-system-icons.css';
+@import '/node_modules/@fluentui/svg-icons/css/fluent-system-icons.css';
 
 
 * {
@@ -27,6 +27,7 @@ body {
     flex: 1;
     display: flex;
     height: 100%;
+    overflow-y: none;
     background-color: #1e1e1e;
     font-style: normal;
     font-family: "IBM Plex Sans", sans-serif;
@@ -39,7 +40,7 @@ body {
     background-color: rgba(37, 37, 38, 0.7);
     /* Fondo oscuro con opacidad para efecto glass */
     padding: 10px;
-    border-right: 1.5px solid #000;
+    border-right: 1.75px solid #000;
     /* Línea de separación */
     backdrop-filter: blur(10px);
     /* Efecto vidrio */
@@ -448,7 +449,7 @@ code {
 
 /* Aplicar estilos de scrollbar a contenedores específicos */
 .file-panel,
-#chat-log, #chat-input {
+#chat-log, #chat-input, #snapshot-panel {
     scrollbar-width: thin;
     /* Para Firefox: scrollbar delgado */
     scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.1);
@@ -472,18 +473,115 @@ code {
     z-index: 1000;
 }
 
-.status-left, .status-right {
+.status-left {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-#vault-button {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    flex-grow: 1;  /* Permite que el botón ocupe todo el espacio disponible */
-    padding: 0 10px; /* Mantiene el padding interno del botón */
+.status-right {
+    display: flex;
+    align-items: center;
+    gap: 0;
 }
 
+
+.status-right button {
+    background: #1e1e1e; /* Fondo transparente */
+    color: #ffffff; /* Color del texto */
+    border: none;
+    height: 25px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background 0.5s, color 0.5s; /* Transición suave */
+    margin-left: 10px; /* Espacio entre botones */
+}
+
+.status-right button:hover {
+    background: #282c34; /* Fondo azul claro al hacer hover */
+    color: #ffffff; /* Texto oscuro al hacer hover */
+}
+
+#snapshot-panel {
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+    background-color: #080703; /* Estilo oscuro moderno */
+    color: #dcdcdc; /* Texto en tono claro */
+    padding: 15px;
+    border-top: 2px solid #aaa48e;
+    display: none;
+    position: absolute;
+    bottom: 25px;
+    z-index: 999;
+    font-family: "IBM Plex Sans", sans-serif;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4); /* Sombras suaves */
+}
+
+#snapshot-panel h3 {
+    color: #ffffff; /* Azul característico de VSCode */
+    margin-bottom: 10px;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+#snapshot-panel p {
+    color: #aaa48e; /* Azul característico de VSCode */
+    margin-bottom: 10px;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+#snapshot-panel button,
+#snapshot-panel select,
+#snapshot-panel input[type="checkbox"] {
+    background-color: #221d0c;
+    border: none;
+    color: #dcdcdc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 5px 0;
+    margin-left: 5px;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+#snapshot-panel button:hover,
+#snapshot-panel select:hover,
+#snapshot-panel input[type="checkbox"]:hover {
+    background-color: #191609;
+}
+
+#snapshot-panel label {
+    font-size: 12px;
+    color: #dddbd2; /* Color de etiquetas */
+    margin-right: 10px;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+#snapshot-list {
+    list-style: none;
+    padding: 10px 0;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+#snapshot-list li {
+    padding: 8px;
+    border: 1px solid transparent;
+    background-color: #21252b;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    transition: all 0.3s;
+    font-size: 14px;
+    color: #dcdcdc;;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+#snapshot-list li:hover {
+    border-color: #61dafb; /* Azul para resaltar al pasar el cursor */
+    cursor: pointer;
+}
+
+#snapshot-list li:active {
+    color: #1e1e1e;
+}
