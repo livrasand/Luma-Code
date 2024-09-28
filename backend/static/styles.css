@@ -447,7 +447,7 @@ code {
 
 /* Aplicar estilos de scrollbar a contenedores específicos */
 .file-panel,
-#chat-log, #chat-input, #snapshot-panel {
+#chat-log, #chat-input, #snapshot-panel, #pomodoro-panel {
     scrollbar-width: thin;
     /* Para Firefox: scrollbar delgado */
     scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.1);
@@ -538,13 +538,39 @@ code {
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4); /* Sombras suaves */
 }
 
+#pomodoro-panel {
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+    background-color: #080703; /* Estilo oscuro moderno */
+    color: #dcdcdc; /* Texto en tono claro */
+    padding: 15px;
+    border-top: 2px solid #aaa48e;
+    display: none;
+    position: absolute;
+    bottom: 25px;
+    z-index: 999;
+    font-family: "IBM Plex Sans", sans-serif;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4); /* Sombras suaves */
+}
+
 #snapshot-panel h3 {
+    color: #ffffff; /* Azul característico de VSCode */
+    margin-bottom: 10px;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+ #pomodoro-panel h3 {
     color: #ffffff; /* Azul característico de VSCode */
     margin-bottom: 10px;
     font-family: "IBM Plex Sans", sans-serif;
 }
 
 #snapshot-panel p {
+    color: #aaa48e; /* Azul característico de VSCode */
+    margin-bottom: 10px;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+#pomodoro-panel p {
     color: #aaa48e; /* Azul característico de VSCode */
     margin-bottom: 10px;
     font-family: "IBM Plex Sans", sans-serif;
@@ -560,6 +586,21 @@ code {
     border-radius: 4px;
     margin: 5px 0;
     margin-left: 5px;
+    cursor: pointer;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+#pomodoro-panel button,
+#pomodoro-panel select,
+#pomodoro-panel input[type="checkbox"] {
+    background-color: #221d0c;
+    border: none;
+    color: #dcdcdc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 5px 0;
+    margin-left: 5px;
+    cursor: pointer;
     font-family: "IBM Plex Sans", sans-serif;
 }
 
@@ -569,7 +610,19 @@ code {
     background-color: #191609;
 }
 
+#pomodoro-panel button:hover,
+#pomodoro-panel select:hover,
+#pomodoro-panel input[type="checkbox"]:hover {
+    background-color: #191609;
+}
+
 #snapshot-panel label {
+    font-size: 12px;
+    color: #dddbd2; /* Color de etiquetas */
+    margin-right: 10px;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+#pomodoro-panel label {
     font-size: 12px;
     color: #dddbd2; /* Color de etiquetas */
     margin-right: 10px;
@@ -624,28 +677,4 @@ code {
 
 #command-suggestions li:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Fondo más claro al pasar el mouse */
-}
-
-
-.tabs {
-    width: 100%; 
-    height: 100%; 
-    flex: 6;
-}
-
-.tabs ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-}
-
-.tabs li {
-    padding: 10px;
-    margin-right: 5px;
-    cursor: pointer;
-    background: #e7e7e7;
-}
-
-.tabs li.active {
-    background: #d3d3d3;
 }

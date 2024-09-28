@@ -19,6 +19,7 @@
             async function sendMessage() {
                 const message = document.getElementById('chat-input').value;
                 const chatLog = document.getElementById('chat-log');
+                startPomodoro();
 
                 if (message.trim()) {
                     chatLog.innerHTML += `<p><strong class="user-message">You:</strong> ${escapeHTML(message)}</p>`;
@@ -101,6 +102,7 @@
             .catch(error => {
                 console.error('Error al seleccionar el directorio:', error);
             });
+            startPomodoro();
     });
 
     function fetchDirectory(path, parentElement) {
