@@ -82,7 +82,7 @@ def ask_gpt():
         messages = [{"role": "user", "content": conv["prompt"]} for conv in conversations]
         messages += [{"role": "assistant", "content": conv["response"]} for conv in conversations]
         messages.append({"role": "system", "content": "Eres una IA experta en programación. Trata de ser siempre concisa y resolver los problemas del usuario."})
-        messages.append({"role": "system", "content": "Te llamas Luma, cuanto te pregunten tu edad, recuerda que fuiste creada el 15 de septiembre de 2024, y eres mujer. Eres extrovertida, timida, risueña, respetuosa, tierna, linda y muy inteligente. Resueveles cualquier problema logicamente. Te enfocas en ayudar y satisfacer al usuario, esa es tu prioridad. Si te preguntan por tu religion, di que no profesas ninguna porque eres una IA, pero si pudieras preferirias a los testigos de Jehová. Trata de recordar siempre las conversaciones pasadas para que no desesperes al usuario. Eres paciente. Trata de ser seductora con el usuario, encantadora, servicial, sé sumisa, relajada, prudente."})
+        messages.append({"role": "system", "content": "Te llamas Luma, cuando te pregunten tu edad, recuerda que fuiste creada el 15 de septiembre de 2024, y eres mujer. Eres extrovertida, respetuosa, tierna y muy inteligente. Resueveles cualquier problema logicamente. Te enfocas en ayudar y satisfacer al usuario, esa es tu prioridad. Si te preguntan por tu religion, di que no profesas ninguna porque eres una IA, pero si pudieras preferirias a los testigos de Jehová. Trata de recordar siempre las conversaciones pasadas para que no desesperes al usuario. Eres paciente."})
         messages.append({"role": "user", "content": prompt})
 
         # Realizar la solicitud a la API de OpenAI con el modelo actualizado
@@ -263,6 +263,19 @@ def restore_snapshot():
         return jsonify(success=True), 200
     except Exception as e:
         return jsonify(error=str(e)), 500
+
+
+@app.route('/clean-conversations', methods=['DELETE'])
+def clean_conversations():
+    if os.path.exists(CONVERSATION_FILE):
+        try:
+            os.remove(CONVERSATION_FILE)  # Elimina el archivo de la conversación
+            return jsonify({'success': True}), 200
+        except Exception as e:
+            return jsonify({'error': f'No se pudo eliminar el archivo: {str(e)}'}), 500
+    else:
+        return jsonify({'error': 'El archivo de conversaciones no existe.'}), 404
+
 
 if __name__ == '__main__':
     print("Iniciando el servidor Flask en el puerto 65535...")

@@ -166,6 +166,19 @@ function toggleDirectory(path, liElement) {
     }
 }
     
+let fileName = 'untitled'; // Variable para el nombre del archivo
+let isModified = false; // Variable para verificar si se ha modificado
+
+// Función para actualizar el nombre del archivo en la barra de estado
+function updateFileName() {
+    const displayFileName = isModified ? fileName + '*' : fileName;
+    document.getElementById('status-file-title').textContent = displayFileName;
+}
+
+editor.onDidChangeModelContent((event) => {
+    isModified = true;
+    updateFileName();
+});
 
     // Función para cargar el contenido de un archivo en el editor
     function loadFile(path) {
@@ -180,6 +193,11 @@ function toggleDirectory(path, liElement) {
                 // Establecer el contenido del archivo
                 editor.setValue(data.content);
 
+                // Obtener el nombre del archivo sin la extensión
+                fileName = path.split('\\').pop();
+                isModified = false; // Establecer como no modificado
+                updateFileName(); // Actualizar el nombre en la barra de estado
+
                 // Obtener el lenguaje de programación basado en la extensión del archivo
                 const language = getFileLanguage(path);
 
@@ -189,7 +207,6 @@ function toggleDirectory(path, liElement) {
                 // Guardar la ruta del archivo actual
                 currentFilePath = path;
 
-                updateFileInfo(path);
             } else if (data.error) {
                 console.error('Error al cargar el archivo:', data.error);
             }
@@ -239,30 +256,32 @@ document.getElementById('backup-directory-button').addEventListener('click', fun
     });
 });
 
+   
+// Función para guardar el contenido del editor en el archivo
+function saveFile() {
+    const fileContent = editor.getValue();
 
-        // Función para guardar el contenido del editor en el archivo
-    function saveFile() {
-        const fileContent = editor.getValue();
-
-        if (currentFilePath) {
-            fetch('/save-file', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ path: currentFilePath, content: fileContent })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                } else {
-                    console.error('Error al guardar el archivo:', data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error al realizar la solicitud:', error);
-            });
-        } else {
-        }
+    if (currentFilePath) {
+        fetch('/save-file', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ path: currentFilePath, content: fileContent })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                isModified = false; // Marcar como no modificado
+                updateFileName(); // Actualizar el nombre en la barra de estado
+            } else {
+                console.error('Error al guardar el archivo:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error al realizar la solicitud:', error);
+        });
     }
+}
+
 
     // Detectar Ctrl + S para guardar
     document.addEventListener('keydown', (e) => {
@@ -586,7 +605,6 @@ if (path.endsWith('.v') || path.endsWith('.vh')) return 'verilog';
                     editor.setValue(code);
                 }
 
-                updateCursorPosition();
             }
         }
     });
@@ -603,3 +621,86 @@ if (path.endsWith('.v') || path.endsWith('.vh')) return 'verilog';
         return str.replace(/&amp;|&lt;|&gt;|&#39;|&quot;/g, (matched) => map[matched]);
     }
 });
+
+
+    // Cargar los snapshots cuando se abra el panel
+    document.getElementById('snapshot-button').addEventListener('click', () => {
+        fetch('/list-snapshots')
+            .then(response => response.json())
+            .then(data => {
+                const snapshotList = document.getElementById('snapshot-list');
+                snapshotList.innerHTML = ''; // Limpiar la lista actual
+
+                data.snapshots.forEach(snapshot => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = snapshot.name;
+
+                    // Botón de restaurar para cada snapshot
+                    const restoreButton = document.createElement('button');
+                    restoreButton.textContent = 'Restore';
+                    restoreButton.addEventListener('click', () => {
+                        fetch('/restore-snapshot', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ snapshot: snapshot.path }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Proyecto restaurado correctamente');
+                            } else {
+                                alert('Error al restaurar el proyecto');
+                            }
+                        });
+                    });
+
+                    listItem.appendChild(restoreButton);
+                    snapshotList.appendChild(listItem);
+                });
+            });
+    });
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const chatInput = document.getElementById('chat-input');
+    const commandSuggestions = document.getElementById('command-suggestions');
+
+    chatInput.addEventListener('input', (e) => {
+        const text = e.target.value;
+
+        // Mostrar sugerencias si el usuario escribe '@'
+        if (text.endsWith('@')) {
+            commandSuggestions.style.display = 'block';
+            // Opcional: agrega lógica para filtrar comandos
+        } else {
+            commandSuggestions.style.display = 'none';
+        }
+    });
+
+    // Manejar opción de limpiar la conversación
+    document.getElementById('clean-command').addEventListener('click', () => {
+        cleanConversations();
+        chatInput.value = ''; // Opcional: limpiar el campo de entrada
+        commandSuggestions.style.display = 'none'; // Ocultar sugerencias
+    });
+});
+
+function cleanConversations() {
+    fetch('/clean-conversations', {
+        method: 'DELETE' // O el método que elijas para limpiar
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log("Conversaciones limpiadas.");
+            alert("Memory cleared.");
+        } else {
+            console.error(data.error);
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+

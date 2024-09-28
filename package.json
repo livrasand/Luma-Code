@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/livrasand/Luma-Code.git"
   },
-  "bugs": {
+  "bugs": { 
     "url": "https://github.com/livrasand/Luma-Code/issues"
   },
   "scripts": {

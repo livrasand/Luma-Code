@@ -176,7 +176,7 @@ body {
     color: #abb2bf;
 }
 
-.hint-enter, .hint-shift-enter {
+.hint-enter, .hint-shift-enter, .hint-at {
     padding: 2px 6px;
     background-color: #abb2bf;
     color: #2d2d2d;
@@ -225,8 +225,6 @@ body {
     animation: gradientBorder 3s ease infinite;
     /* Animación del gradiente */
 }
-
-
 
 /* Hacer que el input no ocupe todo el borde */
 .chat-input-wrapper textarea {
@@ -456,15 +454,15 @@ code {
     /* Color del thumb y track */
 }
 
-
 #status-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 25px;
     background-color: #1e1e1e;
-    border-top: 1px solid #3a3f4b;
+    border-top: 1px solid #333;
     color: white;
+    font-family: 'IBM Plex Sans', sans-serif;
     padding: 0 10px;
     font-size: 12px;
     position: fixed;
@@ -485,25 +483,44 @@ code {
     gap: 0;
 }
 
-
 .status-right button {
-    background: #1e1e1e; /* Fondo transparente */
-    color: #ffffff; /* Color del texto */
-    border: none;
-    height: 25px;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 15px;
-    padding-right: 15px;
-    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
-    transition: background 0.5s, color 0.5s; /* Transición suave */
-    margin-left: 10px; /* Espacio entre botones */
-}
+        background: none;
+        border: none;
+        color: #d4d4d4;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        cursor: pointer;
+        margin-left: 15px;
+        cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+        transition: background 0.5s, color 0.5s;
+    }
 
-.status-right button:hover {
-    background: #282c34; /* Fondo azul claro al hacer hover */
-    color: #ffffff; /* Texto oscuro al hacer hover */
-}
+    .status-right button svg {
+        margin-right: 5px;
+    }
+
+    .status-right button:hover {
+        color: #ffffff;
+    }
+
+    #status-bar button:focus {
+        outline: none;
+    }
+
+    /* Separador entre botones */
+    .status-right button::before {
+        content: '';
+        width: 1px;
+        height: 14px;
+        background-color: #555;
+        margin-right: 10px;
+    }
+
+    /* Snapshots button without border */
+    #snapshot-button::before {
+        display: none;
+    }
 
 #snapshot-panel {
     max-height: 300px;
@@ -584,4 +601,51 @@ code {
 
 #snapshot-list li:active {
     color: #1e1e1e;
+}
+
+#command-suggestions {
+    font-size: 12px;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+#command-suggestions ul {
+    list-style-type: none; /* Elimina marcadores de lista */
+    padding: 8px; /* Espaciado interno */
+    margin: 0; /* Sin margenes */
+}
+
+#command-suggestions li {
+    padding: 4px; /* Espaciado interno de cada sugerencia */
+    color: #abb2bf; /* Color de texto suave */
+    cursor: pointer; /* Cambia al pasar el mouse */
+    transition: background 0.3s; /* Animación para el fondo al pasar el mouse */
+    border-radius: 4px; /* Bordes redondeados de cada sugerencia */
+}
+
+#command-suggestions li:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo más claro al pasar el mouse */
+}
+
+
+.tabs {
+    width: 100%; 
+    height: 100%; 
+    flex: 6;
+}
+
+.tabs ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+.tabs li {
+    padding: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    background: #e7e7e7;
+}
+
+.tabs li.active {
+    background: #d3d3d3;
 }

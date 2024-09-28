@@ -12,22 +12,24 @@
 
     <div id="status-bar">
         <div class="status-left">
-            <span id="status-file-title">untitled*</span>
-            <span id="status-cursor-position">Ln 1, Col 1</span>
-            <span id="status-file-language">Plain Text</span>
+            <span id="status-file-title">untitled</span>
+            <span id="status-cursor-position">1:1</span>
+            <span id="status-file-language">plaintext</span>
         </div>
         <div class="status-right">
-            <button id="snapshot-button"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.25 6a.75.75 0 0 0 0 1.5h5.5a.75.75 0 0 0 0-1.5h-5.5ZM8.5 17.75a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 0 1.5h-5.5a.75.75 0 0 1-.75-.75ZM9.25 14a.75.75 0 0 0 0 1.5h5.5a.75.75 0 0 0 0-1.5h-5.5ZM6 5a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V5Zm3-1.5A1.5 1.5 0 0 0 7.5 5v14A1.5 1.5 0 0 0 9 20.5h6a1.5 1.5 0 0 0 1.5-1.5V5A1.5 1.5 0 0 0 15 3.5H9Z" fill="#ffffff"/></svg> <span style="margin-top:-3px;">Snapshots</span></button>
+            <button id="snapshot-button"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.25 6a.75.75 0 0 0 0 1.5h5.5a.75.75 0 0 0 0-1.5h-5.5ZM8.5 17.75a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 0 1.5h-5.5a.75.75 0 0 1-.75-.75ZM9.25 14a.75.75 0 0 0 0 1.5h5.5a.75.75 0 0 0 0-1.5h-5.5ZM6 5a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V5Zm3-1.5A1.5 1.5 0 0 0 7.5 5v14A1.5 1.5 0 0 0 9 20.5h6a1.5 1.5 0 0 0 1.5-1.5V5A1.5 1.5 0 0 0 15 3.5H9Z" fill="#ffffff"/></svg> Snapshots</button>
             <button id="pomodoro-button"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17Zm0 1.5a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM12 8a.75.75 0 0 1 .743.648l.007.102v4.5a.75.75 0 0 1-1.493.102l-.007-.102v-4.5A.75.75 0 0 1 12 8Zm7.147-2.886.083.06 1.158.964a.75.75 0 0 1-.877 1.212l-.082-.06-1.159-.964a.75.75 0 0 1 .877-1.212ZM14.25 2.5a.75.75 0 0 1 .102 1.493L14.25 4h-4.5a.75.75 0 0 1-.102-1.493L9.75 2.5h4.5Z" fill="#ffffff"/></svg> Pomodoro</button>
             <button id="mc-button"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.698 2.148A.75.75 0 0 1 20 2.75v13.5a.764.764 0 0 1-.004.079 3.5 3.5 0 1 1-1.496-2.702V7.758l-8.5 2.55v7.942a.756.756 0 0 1-.004.079A3.5 3.5 0 1 1 8.5 15.627V5.75a.75.75 0 0 1 .534-.718l10-3a.75.75 0 0 1 .664.116ZM10 8.742l8.5-2.55V3.758L10 6.308v2.434ZM6.5 16.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" fill="#ffffff"/></svg> Music Connect</button>
         </div>
     </div>
+
 
     <div class="container">
         <div class="file-panel">
             <button id="open-folder-btn">Start Coding</button>
             <ul id="file-list" class="tree"></ul>
         </div>
+
         <div id="editor" style="width: 100%; height: 100%; border: none;flex: 6;"></div>
 
         <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
@@ -55,9 +57,27 @@ require(['vs/editor/editor.main'], function () {
         // Puedes agregar lógica adicional aquí si es necesario
     });
 
-    
+    editor.onDidChangeCursorPosition((e) => {
+    const position = editor.getPosition();
+    document.getElementById('status-cursor-position').textContent = `${position.lineNumber}:${position.column}`;
+    });
+
+    // Función para actualizar el lenguaje activo en la barra de estado
+    function updateFileLanguage() {
+        const model = editor.getModel(); // Obtener el modelo activo
+        const language = model.getLanguageId(); // Obtener el lenguaje del modelo
+        document.getElementById('status-file-language').textContent = language ? language : 'Plain Text';
+    }
+
+// Ahora puedes llamar a updateFileName aquí
+editor.onDidChangeModelLanguage(() => {
+    updateFileLanguage();
 });
 
+    // Al iniciar, obtener el lenguaje del archivo abierto
+    updateFileLanguage();
+
+});
         </script>
 
         <div class="chat">
@@ -66,18 +86,23 @@ require(['vs/editor/editor.main'], function () {
                 <textarea id="chat-input" placeholder="Type here to chat with Luma"></textarea>
                 <div class="input-hint">
                     <span class="hint-enter">Enter</span> to send, <span class="hint-shift-enter">Shift + Enter</span>
-                    for new line
+                    for new line, <span class="hint-at">@</span> for internal commands.
                 </div>
+
+                <div id="command-suggestions" style="display: none;">
+                    <ul>
+                        <li id="clean-command">@clean - Clean Luma's memory</li>
+                    </ul>
+                </div>
+
+
             </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 
-    <script type="text/javascript" src="static/index.js"></script>
-
-
-
+    <script src="static/index.js"></script>
 
 <div id="snapshot-panel">
         <h3>Luma Snapshots</h3>
@@ -91,9 +116,7 @@ require(['vs/editor/editor.main'], function () {
     </div>
 
 
-
-
-<script>
+<script type="text/javascript">
 // Mostrar el panel de Snapshots
 document.getElementById('snapshot-button').addEventListener('click', () => {
     const snapshotPanel = document.getElementById('snapshot-panel');
@@ -113,50 +136,7 @@ document.addEventListener('keydown', function(event) {
         snapshotPanel.style.display = 'none';
     }
 });
-
 </script>
-
-<script>
-    // Cargar los snapshots cuando se abra el panel
-    document.getElementById('snapshot-button').addEventListener('click', () => {
-        fetch('/list-snapshots')
-            .then(response => response.json())
-            .then(data => {
-                const snapshotList = document.getElementById('snapshot-list');
-                snapshotList.innerHTML = ''; // Limpiar la lista actual
-
-                data.snapshots.forEach(snapshot => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = snapshot.name;
-
-                    // Botón de restaurar para cada snapshot
-                    const restoreButton = document.createElement('button');
-                    restoreButton.textContent = 'Restore';
-                    restoreButton.addEventListener('click', () => {
-                        fetch('/restore-snapshot', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ snapshot: snapshot.path }),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert('Proyecto restaurado correctamente');
-                            } else {
-                                alert('Error al restaurar el proyecto');
-                            }
-                        });
-                    });
-
-                    listItem.appendChild(restoreButton);
-                    snapshotList.appendChild(listItem);
-                });
-            });
-    });
-</script>
-
 </body>
 
 </html>
