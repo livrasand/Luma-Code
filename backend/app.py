@@ -26,7 +26,6 @@ client.api_key = os.getenv("OPENAI_API_KEY")
 CONVERSATION_FILE = os.path.expanduser("~/luma_code_conversations.json")
 
 SNAPSHOTS_FOLDER = os.path.expanduser("~/luma_code_snapshots/")
-
 @app.route('/node_modules/<path:filename>')
 def node_modules(filename):
     return send_from_directory(os.path.join(app.root_path, '../node_modules'), filename)
@@ -63,6 +62,11 @@ def get_conversations():
     else:
         return jsonify({"conversations": []}), 200
 
+
+def count_tokens(messages):
+    count = sum(len(message['content']) for message in messages)
+    return count // 4 + 1  # Aproximación simple, modificar con el método real si disponible
+
 @app.route('/ask', methods=['POST'])
 def ask_gpt():
     data = request.get_json()
@@ -85,6 +89,16 @@ def ask_gpt():
         messages.append({"role": "system", "content": "Te llamas Luma, cuando te pregunten tu edad, recuerda que fuiste creada el 15 de septiembre de 2024, y eres mujer. Eres extrovertida, respetuosa, tierna y muy inteligente. Resueveles cualquier problema logicamente. Te enfocas en ayudar y satisfacer al usuario, esa es tu prioridad. Si te preguntan por tu religion, di que no profesas ninguna porque eres una IA, pero si pudieras preferirias a los testigos de Jehová. Trata de recordar siempre las conversaciones pasadas para que no desesperes al usuario. Eres paciente."})
         messages.append({"role": "user", "content": prompt})
 
+        # Contar tokens del prompt
+        prompt_token_count = count_tokens(messages)
+
+        # Variable para la alerta
+        alert_message = None
+
+        # Mostrar alerta si supera 4000 tokens
+        if prompt_token_count > 4000:
+            alert_message = "¡Oye tranquilo! Si quieres que te dure tu plan, llévatela tranquilo. Trata de enviarle menos texto a Luma. Procura usar palabras clave, o si lo prefieres, tal vez Luma tenga mucha memoria ya de ti. Puedes limpiarla usando @clean."
+
         # Realizar la solicitud a la API de OpenAI con el modelo actualizado
         response = client.chat.completions.create(
             messages=messages,
@@ -97,8 +111,13 @@ def ask_gpt():
         # Guardar la conversación en el archivo
         save_conversation_to_file(prompt, answer)
 
+        # Construir la respuesta final, incluyendo la alerta si existe
+        response_data = {"response": answer}
+        if alert_message:
+            response_data["alert"] = alert_message
+
         # Devolver la respuesta en formato JSON
-        return jsonify({"response": answer})
+        return jsonify(response_data)
 
     except openai.APIConnectionError as e:
         return jsonify({"error": "Error de conexión con la API: " + str(e)}), 500

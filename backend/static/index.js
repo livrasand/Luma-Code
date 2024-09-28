@@ -16,39 +16,56 @@
     chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-            async function sendMessage() {
-                const message = document.getElementById('chat-input').value;
-                const chatLog = document.getElementById('chat-log');
-                startPomodoro();
+           async function sendMessage() {
+    const message = document.getElementById('chat-input').value;
+    const chatLog = document.getElementById('chat-log');
+    startPomodoro();
 
-                if (message.trim()) {
-                    chatLog.innerHTML += `<p><strong class="user-message">You:</strong> ${escapeHTML(message)}</p>`;
-                    document.getElementById('chat-input').value = ''; // Limpiar el input
+    if (message.trim()) {
+        chatLog.innerHTML += `<p><strong class="user-message">You:</strong> ${escapeHTML(message)}</p>`;
+        document.getElementById('chat-input').value = ''; // Limpiar el input
 
-                    scrollToBottom(); // Hacer scroll hacia abajo
+        scrollToBottom(); // Hacer scroll hacia abajo
 
-                    try {
-                        const response = await fetch('/ask', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ prompt: message }),
-                        });
+        try {
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: message }),
+            });
 
-                        const data = await response.json();
+            const data = await response.json();
 
-                        if (data.response) {
-                            let formattedResponse = escapeHTML(data.response);
-                            formattedResponse = formatResponse(formattedResponse);
-                            chatLog.innerHTML += `<p><strong class="gpt-message">Luma:</strong> ${formattedResponse}</p>`;
-                            Prism.highlightAll(); // Aplicar resaltado de sintaxis
-                        } else if (data.error) {
-                            chatLog.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
-                        }
-                    } catch (error) {
-                        chatLog.innerHTML += `<p><strong>Error:</strong> No se pudo conectar con el servidor.</p>`;
+            // Verificar si hay un mensaje de alerta
+            if (data.alert) {
+                showAlert(data.alert);
+
+                // Usamos setTimeout para permitir que el resto del código se ejecute después de mostrar la alerta
+                setTimeout(() => {
+                    // Continúa con el resto del código
+                    if (data.response) {
+                        let formattedResponse = escapeHTML(data.response);
+                        formattedResponse = formatResponse(formattedResponse);
+                        chatLog.innerHTML += `<p><strong class="gpt-message">Luma:</strong> ${formattedResponse}</p>`;
+                        Prism.highlightAll(); // Aplicar resaltado de sintaxis
+                    } else if (data.error) {
+                        chatLog.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
                     }
-                }
+                }, 0);  // Esto permite que se ejecute inmediatamente después de que el hilo de ejecución termine
+            } else if (data.response) {
+                let formattedResponse = escapeHTML(data.response);
+                formattedResponse = formatResponse(formattedResponse);
+                chatLog.innerHTML += `<p><strong class="gpt-message">Luma:</strong> ${formattedResponse}</p>`;
+                Prism.highlightAll(); // Aplicar resaltado de sintaxis
+            } else if (data.error) {
+                chatLog.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
             }
+        } catch (error) {
+            chatLog.innerHTML += `<p><strong>Error:</strong> No se pudo conectar con el servidor.</p>`;
+        }
+    }
+}
+
 
             function formatResponse(response) {
                 // Formatear bloques de código, encabezados y enlaces como antes
@@ -119,25 +136,40 @@
                 li.dataset.path = item.path;
                 li.classList.add('directory-item');
                 
-                // Añadir ícono
-                const icon = document.createElement('i');
-                icon.className = item.is_dir ? 'folder' : 'file-icon';
+                // Añadir ícono SVG
+                const icon = document.createElement('span');
+                if (item.is_dir) {
+                    // SVG para carpeta cerrada
+                    icon.innerHTML = `
+                        <svg aria-hidden="true" focusable="false" class="octicon octicon-file-directory-fill" viewBox="0 0 16 16" width="16" height="16" fill="#54aeff" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75Z"></path></svg>`;
+                } else {
+                    // SVG para archivo
+                    icon.innerHTML = `
+                        <svg aria-hidden="true" focusable="false" class="octicon octicon-file" viewBox="0 0 16 16" width="16" height="16" fill="#59636e" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path></svg>`;
+                }
                 li.appendChild(icon);
-
                 li.appendChild(document.createTextNode(item.name));
 
                 if (item.is_dir) {
-    li.classList.add('folder');
-    li.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleDirectory(item.path, li);
-    });
-} else {
-    li.addEventListener('click', (e) => {
-        e.stopPropagation(); // No es necesario en este caso
-        loadFile(item.path);
-    });
-}
+                    li.classList.add('folder');
+                    li.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        toggleDirectory(item.path, li);
+                        
+                        // Cambia el SVG al abrir o cerrar la carpeta
+                        const isOpened = li.classList.toggle('opened'); // Agrega o quita la clase 'opened'
+                        icon.innerHTML = isOpened
+                            ? `
+                            <svg aria-hidden="true" focusable="false" class="octicon octicon-file-directory-open-fill" viewBox="0 0 16 16" width="16" height="16" fill="#54aeff" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"><path d="M.513 1.513A1.75 1.75 0 0 1 1.75 1h3.5c.55 0 1.07.26 1.4.7l.9 1.2a.25.25 0 0 0 .2.1H13a1 1 0 0 1 1 1v.5H2.75a.75.75 0 0 0 0 1.5h11.978a1 1 0 0 1 .994 1.117L15 13.25A1.75 1.75 0 0 1 13.25 15H1.75A1.75 1.75 0 0 1 0 13.25V2.75c0-.464.184-.91.513-1.237Z"></path></svg>`
+                            : `
+                            <svg aria-hidden="true" focusable="false" class="octicon octicon-file-directory-fill" viewBox="0 0 16 16" width="16" height="16" fill="#54aeff" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75Z"></path></svg>`; // Vuelve al SVG de la carpeta cerrada
+                    });
+                } else {
+                    li.addEventListener('click', (e) => {
+                        e.stopPropagation(); // No es necesario en este caso
+                        loadFile(item.path);
+                    });
+                }
                 parentElement.appendChild(li);
             });
         } else if (data.error) {
@@ -150,6 +182,7 @@
         console.error('Error al cargar el directorio:', error);
     });
 }
+
 
 function toggleDirectory(path, liElement) {
     const isOpen = liElement.classList.contains('open');
@@ -184,39 +217,69 @@ editor.onDidChangeModelContent((event) => {
 
     // Función para cargar el contenido de un archivo en el editor
     function loadFile(path) {
-        fetch('/read-file', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ path })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.content) {
-                // Establecer el contenido del archivo
-                editor.setValue(data.content);
+    fetch('/read-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.content) {
+            // Establecer el contenido del archivo
+            editor.setValue(data.content);
 
-                // Obtener el nombre del archivo sin la extensión
-                fileName = path.split('\\').pop();
-                isModified = false; // Establecer como no modificado
-                updateFileName(); // Actualizar el nombre en la barra de estado
+            // Obtener el nombre del archivo sin la extensión
+            const fileName = path.split('\\').pop();
+            isModified = false; // Establecer como no modificado
+            updateFileName(); // Actualizar el nombre en la barra de estado
 
-                // Obtener el lenguaje de programación basado en la extensión del archivo
-                const language = getFileLanguage(path);
+            // Obtener el lenguaje de programación basado en la extensión del archivo
+            const language = getFileLanguage(path);
 
-                // Establecer el lenguaje en el modelo del editor
-                monaco.editor.setModelLanguage(editor.getModel(), language);
+            // Establecer el lenguaje en el modelo del editor
+            monaco.editor.setModelLanguage(editor.getModel(), language);
 
-                // Guardar la ruta del archivo actual
-                currentFilePath = path;
+            // Guardar la ruta del archivo actual
+            currentFilePath = path;
 
-            } else if (data.error) {
-                console.error('Error al cargar el archivo:', data.error);
+            // Calcular la cantidad de líneas
+            const lineCount = data.content.split('\n').length;
+
+            // Calcular el tamaño del archivo en bytes
+            const fileSize = new Blob([data.content]).size; // Tamaño en bytes
+            const sizeInKB = (fileSize / 1024).toFixed(2); // Tamaño en KB
+            const sizeInMB = (fileSize / (1024 * 1024)).toFixed(2); // Tamaño en MB
+
+            // Actualizar la barra de estado con la información del archivo
+            const statusFileTitle = document.getElementById('status-file-title');
+            const statusCursorPosition = document.getElementById('status-cursor-position');
+            const statusFileLanguage = document.getElementById('status-file-language');
+
+            statusFileTitle.textContent = fileName; // Mostrar el nombre del archivo
+            statusCursorPosition.textContent = `1:1`; // Inicializar la posición del cursor
+            statusFileLanguage.textContent = language; // Mostrar el lenguaje del archivo
+
+            // Mostrar la cantidad de líneas y el tamaño del archivo
+            const fileInfo = document.createElement('span');
+            fileInfo.id = 'status-file-info'; // Asignar un ID si quieres modificarlo más tarde
+            fileInfo.textContent = `${lineCount} lines · ${fileSize < 2048 ? sizeInKB + ' KB' : sizeInMB + ' MB'}`;
+            
+            // Limpiar el contenido anterior y agregar la nueva información
+            const existingInfo = document.getElementById('status-file-info');
+            if (existingInfo) {
+                existingInfo.textContent = fileInfo.textContent;
+            } else {
+                document.getElementById('status-bar').appendChild(fileInfo); // Suponiendo que tienes un contenedor para la barra de estado
             }
-        })
-        .catch(error => {
-            console.error('Error al leer el archivo:', error);
-        });
-    }
+        } else if (data.error) {
+            console.error('Error al cargar el archivo:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error al leer el archivo:', error);
+    });
+}
+
 
     // Evento para crear un Snapshot
 document.getElementById('backup-directory-button').addEventListener('click', function() {
@@ -704,5 +767,19 @@ function cleanConversations() {
         }
     })
     .catch(error => console.error("Error:", error));
+}
+
+
+function showAlert(message) {
+    const alertContainer = document.getElementById('alert-container');
+    const alertMessage = document.getElementById('alert-message');
+
+    alertMessage.innerText = message;
+    alertContainer.style.display = 'block'; // Mostrar la alerta
+
+    // Opcional: esconder la alerta después de 3 segundos
+    setTimeout(() => {
+        alertContainer.style.display = 'none';
+    }, 8000);
 }
 
