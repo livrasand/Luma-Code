@@ -295,6 +295,82 @@ def clean_conversations():
     else:
         return jsonify({'error': 'El archivo de conversaciones no existe.'}), 404
 
+@app.route('/create-file', methods=['POST'])
+def create_file():
+    try:
+        data = request.get_json()
+        file_name = data.get('name')
+        directory = data.get('directory')
+
+        # Verificar directorio
+        if not directory or not os.path.isdir(directory):
+            return jsonify({'error': 'Directorio no válido o no encontrado'}), 400
+
+        if not file_name:
+            return jsonify({'error': 'Nombre de archivo inválido'}), 400
+
+        file_path = os.path.join(directory, file_name)
+        
+        # Verificar si el archivo ya existe
+        if os.path.exists(file_path):
+            return jsonify({'error': 'El archivo ya existe'}), 400
+
+        # Crear el archivo
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write('')
+
+        return jsonify({'success': True}), 200
+
+    except Exception as e:
+        print(f"Error al crear el archivo: {e}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+@app.route('/rename-file', methods=['POST'])
+def rename_file():
+    try:
+        data = request.get_json()
+        old_path = data.get('oldPath')
+        new_name = data.get('newName')
+
+        if not old_path or not new_name:
+            return jsonify({'error': 'Nombre de archivo o ruta no válidos'}), 400
+
+        # Obtener el directorio actual y el nuevo nombre completo
+        directory = os.path.dirname(old_path)
+        new_path = os.path.join(directory, new_name)
+
+        # Verificar si el nuevo nombre ya existe
+        if os.path.exists(new_path):
+            return jsonify({'error': 'El archivo con ese nombre ya existe'}), 400
+
+        # Renombrar el archivo
+        os.rename(old_path, new_path)
+        return jsonify({'success': True}), 200
+
+    except Exception as e:
+        print(f"Error al renombrar el archivo: {e}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+
+@app.route('/delete-file', methods=['POST'])
+def delete_file():
+    try:
+        data = request.get_json()
+        file_path = data.get('path')
+
+        # Verificar si el archivo existe
+        if not file_path or not os.path.isfile(file_path):
+            return jsonify({'error': 'Archivo no encontrado'}), 400
+
+        # Eliminar el archivo
+        os.remove(file_path)
+
+        return jsonify({'success': True}), 200
+
+    except Exception as e:
+        print(f"Error al eliminar el archivo: {e}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
 
 if __name__ == '__main__':
     print("Iniciando el servidor Flask en el puerto 65535...")

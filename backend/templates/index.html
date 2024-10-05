@@ -12,6 +12,16 @@
 
     <div id="status-bar">
         <div class="status-left">
+            <h2 class="Box-sc-g0xbh4-0 XosP prc-Heading-Heading-6CmGO" style="width:25px;height: 25px;margin-top: 15px;margin-right: -5px;">
+    <span role="tooltip" aria-label="Collapse file tree" id="expand-button-file-tree-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-se" style="width:25px;height: 25px;">
+        <button id="toggle-file-panel-btn-in-status-bar" data-component="IconButton" type="button" aria-expanded="true" aria-controls="repos-file-tree" data-hotkey="Control+b" class="types__StyledButton-sc-ws60qy-0 cOEWYV prc-Button-IconButton-szpyj" data-loading="false" data-no-visuals="true" data-size="medium" aria-describedby=":r9l:-loading-announcement" aria-labelledby="expand-button-file-tree-button" style="width:20px;height: 20px;">
+            <svg aria-hidden="true" focusable="false" class="octicon octicon-sidebar-expand" viewBox="0 0 16 16" width="12" height="12" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;">
+                <path d="m4.177 7.823 2.396-2.396A.25.25 0 0 1 7 5.604v4.792a.25.25 0 0 1-.427.177L4.177 8.177a.25.25 0 0 1 0-.354Z"></path>
+                <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25H9.5v-13Zm12.5 13a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H11v13Z"></path>
+            </svg>
+        </button>
+    </span>
+</h2>
             <span id="status-file-title">untitled</span>
             <span id="status-cursor-position">1:1</span>
             <span id="status-file-language">plaintext</span>
@@ -30,44 +40,64 @@
             <button id="open-folder-btn">Start Coding</button>
             
            <div class="Box-sc-g0xbh4-0 jfIeyl">
-    <h2 class="Box-sc-g0xbh4-0 XosP prc-Heading-Heading-6CmGO">
-        <span role="tooltip" aria-label="Collapse file tree" id="expand-button-file-tree-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-se">
-            <button data-component="IconButton" type="button" data-testid="collapse-file-tree-button" aria-expanded="true" aria-controls="repos-file-tree" data-hotkey="Control+b" class="types__StyledButton-sc-ws60qy-0 cOEWYV prc-Button-IconButton-szpyj" data-loading="false" data-no-visuals="true" data-size="medium" aria-describedby=":r9l:-loading-announcement" aria-labelledby="expand-button-file-tree-button">
-                <svg aria-hidden="true" focusable="false" class="octicon octicon-sidebar-expand" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;">
-                    <path d="m4.177 7.823 2.396-2.396A.25.25 0 0 1 7 5.604v4.792a.25.25 0 0 1-.427.177L4.177 8.177a.25.25 0 0 1 0-.354Z"></path>
-                    <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25H9.5v-13Zm12.5 13a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H11v13Z"></path>
-                </svg>
-            </button>
-        </span>
 
+<h2 class="Box-sc-g0xbh4-0 XosP prc-Heading-Heading-6CmGO">
+    <span role="tooltip" aria-label="Collapse file tree" id="expand-button-file-tree-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-se">
+        <button id="toggle-file-panel-btn" data-component="IconButton" type="button" aria-expanded="true" aria-controls="repos-file-tree" data-hotkey="Control+b" class="types__StyledButton-sc-ws60qy-0 cOEWYV prc-Button-IconButton-szpyj" data-loading="false" data-no-visuals="true" data-size="medium" aria-describedby=":r9l:-loading-announcement" aria-labelledby="expand-button-file-tree-button">
+            <svg aria-hidden="true" focusable="false" class="octicon octicon-sidebar-expand" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;">
+                <path d="m4.177 7.823 2.396-2.396A.25.25 0 0 1 7 5.604v4.792a.25.25 0 0 1-.427.177L4.177 8.177a.25.25 0 0 1 0-.354Z"></path>
+                <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25H9.5v-13Zm12.5 13a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H11v13Z"></path>
+            </svg>
+        </button>
+    </span>
     <span class="Box-sc-g0xbh4-0 kOkWgo prc-Heading-Heading-6CmGO">Files</span>
-    </h2>
+</h2>
+    
 
-    <div class="Box-sc-g0xbh4-0 eTeVqd">
-        <span role="tooltip" aria-label="Add file" id=":r9o:" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-s">
-            <a sx="[object Object]" data-component="IconButton" type="button" aria-label="Add file" class="types__StyledButton-sc-ws60qy-0 hfIjLs prc-Button-IconButton-szpyj" data-loading="false" data-no-visuals="true" data-size="medium" aria-describedby=":r9p:-loading-announcement" href="/livrasand/Luma-Code/new/main/backend">
-                <svg aria-hidden="true" focusable="false" class="octicon octicon-plus" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;">
-                    <path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"></path>
-                </svg>
-            </a>
-        </span>
-    </div>
+    
+<div class="Box-sc-g0xbh4-0 eTeVqd">
+    <span role="tooltip" aria-label="Add file" id="add-file-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-s">
+        <button type="button" class="types__StyledButton-sc-ws60qy-0 hfIjLs prc-Button-IconButton-szpyj" id="add-file-btn">
+            <svg aria-hidden="true" focusable="false" class="octicon octicon-plus" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;">
+                <path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"></path>
+            </svg>
+        </button>
+    </span>
 </div>
 
-<div class="Box-sc-g0xbh4-0 qkmJR"><span class="TextInputWrapper__TextInputBaseWrapper-sc-1mqhpbi-0 TextInputWrapper-sc-1mqhpbi-1 fgiTUz klSCQM TextInput-wrapper" aria-busy="false"><span class="TextInput-icon"><svg aria-hidden="true" focusable="false" class="octicon octicon-search" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg></span><input type="text" aria-label="Go to file" role="combobox" aria-controls="file-results-list" aria-expanded="false" aria-haspopup="dialog" autocorrect="off" spellcheck="false" placeholder="Go to file" data-component="input" class="UnstyledTextInput-sc-14ypya-0 kbCLEG" value=""><span class="TextInput-icon"><div class="Box-sc-g0xbh4-0 dItACB"><kbd>t</kbd></div></span></span></div>
+</div>
+
+<div class="Box-sc-g0xbh4-0 qkmJR"><span class="TextInputWrapper__TextInputBaseWrapper-sc-1mqhpbi-0 TextInputWrapper-sc-1mqhpbi-1 fgiTUz klSCQM TextInput-wrapper" aria-busy="false"><span class="TextInput-icon"><svg aria-hidden="true" focusable="false" class="octicon octicon-search" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg></span><input type="text" aria-label="Go to file" role="combobox" aria-controls="file-results-list" aria-expanded="false" aria-haspopup="dialog" autocorrect="off" spellcheck="false" placeholder="Go to file" data-component="input" class="UnstyledTextInput-sc-14ypya-0 kbCLEG" value=""></span></div>
 
 
             <ul id="file-list" class="tree"></ul>
+
+            <!-- Menú contextual oculto inicialmente -->
+<div id="contextMenu" class="context-menu" style="display: none; position: absolute;">
+    <ul>
+        <li id="renameOption">Renombrar</li>
+        <li id="deleteOption">Eliminar</li>
+    </ul>
+</div>
         </div>
 
-        <div id="editor" style="width: 100%; height: 100%; border: none;flex: 6;"></div>
+        <div id="editor" style="height: 100%; border: none;flex: 6;"></div>
 
         <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
         <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
 
         <script>
             let editor;  // Hacer que editor sea accesible globalmente
+ // Nombre del archivo inicial
+let isModified = false; // Verificar si se ha modificado
 
+// Función para actualizar el nombre del archivo en la barra de estado
+function updateFileName() {
+    const displayFileName = isModified ? fileNameModified + '*' : fileNameModified; // Agregar '*' si se modificó
+    document.getElementById('status-file-title').textContent = displayFileName; // Actualizar el contenido del DOM
+}
+
+// Inicialización del editor
 require.config({ paths: { vs: '/node_modules/monaco-editor/min/vs' } });
 
 require(['vs/editor/editor.main'], function () {
@@ -82,32 +112,32 @@ require(['vs/editor/editor.main'], function () {
         editor.layout();
     });
 
-    // Este evento no interfiere con el Enter
-    document.addEventListener('keydown', (e) => {
-        // Puedes agregar lógica adicional aquí si es necesario
+    // Detectar cambios en el contenido del editor
+    editor.onDidChangeModelContent((event) => {
+        isModified = true; // Marcar como modificado
+        updateFileName(); // Actualizar el nombre en la barra de estado
     });
 
+    // Funciones para actualizar el cursor y el lenguaje
     editor.onDidChangeCursorPosition((e) => {
-    const position = editor.getPosition();
-    document.getElementById('status-cursor-position').textContent = `${position.lineNumber}:${position.column}`;
+        const position = editor.getPosition();
+        document.getElementById('status-cursor-position').textContent = `${position.lineNumber}:${position.column}`;
     });
 
-    // Función para actualizar el lenguaje activo en la barra de estado
     function updateFileLanguage() {
         const model = editor.getModel(); // Obtener el modelo activo
         const language = model.getLanguageId(); // Obtener el lenguaje del modelo
         document.getElementById('status-file-language').textContent = language ? language : 'Plain Text';
     }
 
-// Ahora puedes llamar a updateFileName aquí
-editor.onDidChangeModelLanguage(() => {
+    editor.onDidChangeModelLanguage(() => {
+        updateFileLanguage();
+    });
+
+    // Obtener el lenguaje del archivo al iniciar
     updateFileLanguage();
 });
 
-    // Al iniciar, obtener el lenguaje del archivo abierto
-    updateFileLanguage();
-
-});
         </script>
 
         <div class="chat">
@@ -288,7 +318,48 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+document.getElementById('toggle-file-panel-btn').addEventListener('click', function() {
+    const filePanel = document.querySelector('.file-panel');
+    if (filePanel.style.display === 'block') {
+        filePanel.style.display = 'none';
+    } else {
+        filePanel.style.display = 'block';
+    }
+});
+
+document.getElementById('toggle-file-panel-btn-in-status-bar').addEventListener('click', function() {
+    const filePanel = document.querySelector('.file-panel');
+    if (filePanel.style.display === 'block') {
+        filePanel.style.display = 'none';
+    } else {
+        filePanel.style.display = 'block';
+    }
+});
+
 </script>
+<script type="text/javascript">
+
+
+const filePanel = document.querySelector('.file-panel');
+
+filePanel.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy'; // Muestra que se puede soltar
+});
+
+filePanel.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+
+    for (const file of files) {
+        // Aquí puedes manejar el archivo (subiéndolo a tu servidor, etc.)
+        console.log('Archivo arrastrado:', file.name);
+    }
+});
+
+</script>
+
+
 </body>
 
 </html>
