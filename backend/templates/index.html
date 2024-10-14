@@ -6,14 +6,18 @@
     <title>Luma Code</title>
     <link rel="stylesheet" href="/static/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.1.3/marked.min.js"></script>
+
 </head>
 
 <body>
 
     <div id="status-bar">
         <div class="status-left">
-            <h2 class="Box-sc-g0xbh4-0 XosP prc-Heading-Heading-6CmGO" style="width:25px;height: 25px;margin-top: 15px;margin-right: -5px;">
-    <span role="tooltip" aria-label="Collapse file tree" id="expand-button-file-tree-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-se" style="width:25px;height: 25px;">
+            <h2 class="Box-sc-g0xbh4-0 XosP prc-Heading-Heading-6CmGO"
+                style="width:25px;height: 25px;margin-top: 15px;margin-right: -5px;">
+                <span role="tooltip" aria-label="Collapse file tree" id="expand-button-file-tree-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-se" style="width:25px;height: 25px;">
         <button id="toggle-file-panel-btn-in-status-bar" data-component="IconButton" type="button" aria-expanded="true" aria-controls="repos-file-tree" data-hotkey="Control+b" class="types__StyledButton-sc-ws60qy-0 cOEWYV prc-Button-IconButton-szpyj" data-loading="false" data-no-visuals="true" data-size="medium" aria-describedby=":r9l:-loading-announcement" aria-labelledby="expand-button-file-tree-button" style="width:20px;height: 20px;">
             <svg aria-hidden="true" focusable="false" class="octicon octicon-sidebar-expand" viewBox="0 0 16 16" width="12" height="12" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;">
                 <path d="m4.177 7.823 2.396-2.396A.25.25 0 0 1 7 5.604v4.792a.25.25 0 0 1-.427.177L4.177 8.177a.25.25 0 0 1 0-.354Z"></path>
@@ -21,13 +25,17 @@
             </svg>
         </button>
     </span>
-</h2>
+            </h2>
             <span id="status-file-title">untitled</span>
             <span id="status-cursor-position">1:1</span>
             <span id="status-file-language">plaintext</span>
             <span id="status-file-info"></span>
         </div>
         <div class="status-right">
+            <button id="snapshot-button">Cloud Sync</button>
+            <button id="snapshot-button">Live Share</button>
+            <button id="snapshot-button">Terminal</button>
+            <button id="snapshot-button">Git</button>
             <button id="snapshot-button"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3H9Zm-.5 4.75A.75.75 0 0 1 9.25 6h5.5a.75.75 0 0 1 0 1.5h-5.5a.75.75 0 0 1-.75-.75Zm0 11a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 0 1.5h-5.5a.75.75 0 0 1-.75-.75Zm0-3a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 0 1.5h-5.5a.75.75 0 0 1-.75-.75Z" fill="#fff"/></svg> Snapshots</button>
             <button id="pomodoro-button"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17Zm0 3a.75.75 0 0 0-.743.648l-.007.102v4.5l.007.102a.75.75 0 0 0 1.486 0l.007-.102v-4.5l-.007-.102A.75.75 0 0 0 12 8Zm7.17-2.877.082.061 1.149 1a.75.75 0 0 1-.904 1.193l-.081-.061-1.149-1a.75.75 0 0 1 .903-1.193ZM14.25 2.5a.75.75 0 0 1 .102 1.493L14.25 4h-4.5a.75.75 0 0 1-.102-1.493L9.75 2.5h4.5Z" fill="#fff"/></svg> Pomodoro</button>
             <button id="mc-button"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 12a8.5 8.5 0 0 1 17 0v2h-2.25a.75.75 0 0 0-.75.75v6.5c0 .414.336.75.75.75H19a3 3 0 0 0 3-3v-7c0-5.523-4.477-10-10-10S2 6.477 2 12v7a3 3 0 0 0 3 3h.75a.75.75 0 0 0 .75-.75v-6.5a.75.75 0 0 0-.75-.75H3.5v-2Zm9.25-.25a.75.75 0 0 0-1.5 0v10.5a.75.75 0 0 0 1.5 0v-10.5Zm-4 2.25a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5a.75.75 0 0 1 .75-.75Zm7.25.75a.75.75 0 0 0-1.5 0v4.5a.75.75 0 0 0 1.5 0v-4.5Z" fill="#fff"/></svg> Music Connect</button>
@@ -38,11 +46,11 @@
     <div class="container">
         <div class="file-panel">
             <button id="open-folder-btn">Start Coding</button>
-            
-           <div class="Box-sc-g0xbh4-0 jfIeyl">
 
-<h2 class="Box-sc-g0xbh4-0 XosP prc-Heading-Heading-6CmGO">
-    <span role="tooltip" aria-label="Collapse file tree" id="expand-button-file-tree-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-se">
+            <div class="Box-sc-g0xbh4-0 jfIeyl">
+
+                <h2 class="Box-sc-g0xbh4-0 XosP prc-Heading-Heading-6CmGO">
+                    <span role="tooltip" aria-label="Collapse file tree" id="expand-button-file-tree-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-se">
         <button id="toggle-file-panel-btn" data-component="IconButton" type="button" aria-expanded="true" aria-controls="repos-file-tree" data-hotkey="Control+b" class="types__StyledButton-sc-ws60qy-0 cOEWYV prc-Button-IconButton-szpyj" data-loading="false" data-no-visuals="true" data-size="medium" aria-describedby=":r9l:-loading-announcement" aria-labelledby="expand-button-file-tree-button">
             <svg aria-hidden="true" focusable="false" class="octicon octicon-sidebar-expand" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;">
                 <path d="m4.177 7.823 2.396-2.396A.25.25 0 0 1 7 5.604v4.792a.25.25 0 0 1-.427.177L4.177 8.177a.25.25 0 0 1 0-.354Z"></path>
@@ -50,38 +58,47 @@
             </svg>
         </button>
     </span>
-    <span class="Box-sc-g0xbh4-0 kOkWgo prc-Heading-Heading-6CmGO">Files</span>
-</h2>
-    
+                    <span class="Box-sc-g0xbh4-0 kOkWgo prc-Heading-Heading-6CmGO">Files</span>
+                </h2>
 
-    
-<div class="Box-sc-g0xbh4-0 eTeVqd">
-    <span role="tooltip" aria-label="Add file" id="add-file-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-s">
+
+
+                <div class="Box-sc-g0xbh4-0 eTeVqd">
+                    <span role="tooltip" aria-label="Add file" id="add-file-button" class="Tooltip__TooltipBase-sc-17tf59c-0 fiSvBN tooltipped-s">
         <button type="button" class="types__StyledButton-sc-ws60qy-0 hfIjLs prc-Button-IconButton-szpyj" id="add-file-btn">
             <svg aria-hidden="true" focusable="false" class="octicon octicon-plus" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;">
                 <path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"></path>
             </svg>
         </button>
     </span>
-</div>
+                </div>
 
-</div>
+            </div>
 
-<div class="Box-sc-g0xbh4-0 qkmJR"><span class="TextInputWrapper__TextInputBaseWrapper-sc-1mqhpbi-0 TextInputWrapper-sc-1mqhpbi-1 fgiTUz klSCQM TextInput-wrapper" aria-busy="false"><span class="TextInput-icon"><svg aria-hidden="true" focusable="false" class="octicon octicon-search" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg></span><input type="text" aria-label="Go to file" role="combobox" aria-controls="file-results-list" aria-expanded="false" aria-haspopup="dialog" autocorrect="off" spellcheck="false" placeholder="Go to file" data-component="input" class="UnstyledTextInput-sc-14ypya-0 kbCLEG" value=""></span></div>
+            <div class="Box-sc-g0xbh4-0 qkmJR">
+                <span class="TextInputWrapper__TextInputBaseWrapper-sc-1mqhpbi-0 TextInputWrapper-sc-1mqhpbi-1 fgiTUz klSCQM TextInput-wrapper" aria-busy="false"><span class="TextInput-icon"><svg aria-hidden="true" focusable="false" class="octicon octicon-search" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg></span><input type="text" aria-label="Go to file" role="combobox" aria-controls="file-results-list" aria-expanded="false" aria-haspopup="dialog" autocorrect="off" spellcheck="false" placeholder="Go to file" data-component="input" class="UnstyledTextInput-sc-14ypya-0 kbCLEG" value=""></span>
+            </div>
 
 
             <ul id="file-list" class="tree"></ul>
 
             <!-- Menú contextual oculto inicialmente -->
-<div id="contextMenu" class="context-menu" style="display: none; position: absolute;">
-    <ul>
-        <li id="renameOption">Renombrar</li>
-        <li id="deleteOption">Eliminar</li>
-    </ul>
-</div>
+            <div id="contextMenu" class="context-menu" style="display: none; position: absolute;">
+                <ul>
+                    <li id="renameOption">Renombrar</li>
+                    <li id="deleteOption">Eliminar</li>
+                </ul>
+            </div>
         </div>
 
+<div class="tabs-container">
+    <div class="tabs" id="tabs">
+        <!-- Las pestañas se agregarán aquí -->
+    </div>
+
         <div id="editor" style="height: 100%; border: none;flex: 6;"></div>
+</div>
+
 
         <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
         <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
@@ -152,6 +169,7 @@ require(['vs/editor/editor.main'], function () {
                 <div id="command-suggestions" style="display: none;">
                     <ul>
                         <li id="clean-command">@clean - Clean Luma's memory</li>
+                        <li id="toggle-memory-command">@temporarychat - Toggle memory usage</li>
                     </ul>
                 </div>
 
@@ -168,27 +186,34 @@ require(['vs/editor/editor.main'], function () {
 
     <script src="static/index.js"></script>
 
-<div id="snapshot-panel">
+    <div id="snapshot-panel">
         <h3>Luma Snapshots</h3>
-        <p>Create snapshots to never lose progress on your code, allowing you to easily navigate between previous versions of your work.</p>
-<button id="backup-directory-button">Create Snapshot</button>
-<br>
-<p>Creating a snapshot can take a long time depending on the size of your project. However, you can press <code class="inline-code">ESC</code> to close this window, and the process will continue to work in the background while the snapshot is being created.</p>
+        <p>Create snapshots to never lose progress on your code, allowing you to easily navigate between previous
+            versions of your work.</p>
+        <button id="backup-directory-button">Create Snapshot</button>
+        <br>
+        <p>Creating a snapshot can take a long time depending on the size of your project. However, you can press
+            <code class="inline-code">ESC</code> to close this window, and the process will continue to work in the
+            background while the snapshot is being created.
+        </p>
         <br>
         <h4>Snapshots:</h4>
         <ul id="snapshot-list"></ul>
     </div>
 
-<div id="pomodoro-panel">
-    <h3>Luma Pomodoro</h3>
-    <p>Welcome to Luma Pomodoro, your intelligent assistant for maximizing productivity and taking care of your eye health. Work for 20 minutes and enjoy brief breaks. Luma Code automatically detects when you start your work session, allowing you to focus on what really matters.</p>
-    <p id="pomodoro-timer">Next break in: <strong>20:00</strong></p>
-    <br>
-    <p>Remember to apply the <strong>20-20-20</strong> rule: every 20 minutes, take a short break of 20 seconds and look at something 20 feet away to relax your eyes. Let Luma Code take care of the rest!</p>
-</div>
+    <div id="pomodoro-panel">
+        <h3>Luma Pomodoro</h3>
+        <p>Welcome to Luma Pomodoro, your intelligent assistant for maximizing productivity and taking care of your eye
+            health. Work for 20 minutes and enjoy brief breaks. Luma Code automatically detects when you start your work
+            session, allowing you to focus on what really matters.</p>
+        <p id="pomodoro-timer">Next break in: <strong>20:00</strong></p>
+        <br>
+        <p>Remember to apply the <strong>20-20-20</strong> rule: every 20 minutes, take a short break of 20 seconds and
+            look at something 20 feet away to relax your eyes. Let Luma Code take care of the rest!</p>
+    </div>
 
-<script type="text/javascript">
-// Mostrar el panel de Snapshots
+    <script type="text/javascript">
+        // Mostrar el panel de Snapshots
 document.getElementById('snapshot-button').addEventListener('click', () => {
     const snapshotPanel = document.getElementById('snapshot-panel');
     
@@ -207,10 +232,10 @@ document.addEventListener('keydown', function(event) {
         snapshotPanel.style.display = 'none';
     }
 });
-</script>
+    </script>
 
-<script type="text/javascript">
-    let pomodoroTimer;
+    <script type="text/javascript">
+        let pomodoroTimer;
     let workDuration = 20 * 60; // 20 minutos en segundos
     let shortBreakDuration = 20; // 20 segundos
     let longBreakDuration = 10 * 60; // 10 minutos en segundos
@@ -295,10 +320,10 @@ document.addEventListener('keydown', function(event) {
     document.getElementById('pomodoro-button').addEventListener('click', () => {
         startPomodoro();
     });
-</script>
+    </script>
 
-<script>
-// Mostrar el panel de Snapshots
+    <script>
+        // Mostrar el panel de Snapshots
 document.getElementById('pomodoro-button').addEventListener('click', () => {
     const pomodoroPanel = document.getElementById('pomodoro-panel');
     
@@ -336,11 +361,9 @@ document.getElementById('toggle-file-panel-btn-in-status-bar').addEventListener(
     }
 });
 
-</script>
-<script type="text/javascript">
-
-
-const filePanel = document.querySelector('.file-panel');
+    </script>
+    <script type="text/javascript">
+        const filePanel = document.querySelector('.file-panel');
 
 filePanel.addEventListener('dragover', (e) => {
     e.preventDefault();
@@ -357,7 +380,7 @@ filePanel.addEventListener('drop', (e) => {
     }
 });
 
-</script>
+    </script>
 
 
 </body>

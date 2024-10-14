@@ -22,7 +22,7 @@ client = OpenAI()
 
 # Configurar la API Key de OpenAI
 client.api_key = os.getenv("OPENAI_API_KEY")
-
+MEMORY_ENABLED = True 
 CONVERSATION_FILE = os.path.expanduser("~/luma_code_conversations.json")
 
 SNAPSHOTS_FOLDER = os.path.expanduser("~/luma_code_snapshots/")
@@ -35,6 +35,9 @@ def index():
     return render_template('index.html')
 
 def save_conversation_to_file(prompt, response):
+    if not MEMORY_ENABLED:
+        return  # No guardar si la memoria está deshabilitada
+
     # Crear un diccionario para almacenar cada conversación
     conversation_entry = {"prompt": prompt, "response": response}
 
@@ -52,6 +55,7 @@ def save_conversation_to_file(prompt, response):
     with open(CONVERSATION_FILE, 'w', encoding='utf-8') as file:
         json.dump(conversations, file, ensure_ascii=False, indent=4)
 
+
 @app.route('/get-conversations', methods=['GET'])
 def get_conversations():
     # Leer el archivo de conversaciones
@@ -61,7 +65,6 @@ def get_conversations():
         return jsonify({"conversations": conversations}), 200
     else:
         return jsonify({"conversations": []}), 200
-
 
 def count_tokens(messages):
     count = sum(len(message['content']) for message in messages)
@@ -97,7 +100,7 @@ def ask_gpt():
 
         # Mostrar alerta si supera 4000 tokens
         if prompt_token_count > 4000:
-            alert_message = "¡Oye tranquilo! Si quieres que te dure tu plan, llévatela tranquilo. Trata de enviarle menos texto a Luma. Procura usar palabras clave, o si lo prefieres, tal vez Luma tenga mucha memoria ya de ti. Puedes limpiarla usando @clean."
+            alert_message = "¡Oye tranquilo! Si quieres que te dure tu plan, llévatela tranquilo. Trata de enviarle menos texto a Luma. Puedes limpiar la memoria de Luma usando @clean."
 
         # Realizar la solicitud a la API de OpenAI con el modelo actualizado
         response = client.chat.completions.create(
@@ -351,7 +354,6 @@ def rename_file():
         print(f"Error al renombrar el archivo: {e}")
         return jsonify({'error': 'Error interno del servidor'}), 500
 
-
 @app.route('/delete-file', methods=['POST'])
 def delete_file():
     try:
@@ -371,6 +373,12 @@ def delete_file():
         print(f"Error al eliminar el archivo: {e}")
         return jsonify({'error': 'Error interno del servidor'}), 500
 
+@app.route('/toggle-memory', methods=['POST'])
+def toggle_memory():
+    global MEMORY_ENABLED
+    data = request.get_json()
+    MEMORY_ENABLED = data.get("memoryEnabled", MEMORY_ENABLED)
+    return jsonify({"success": True, "memoryEnabled": MEMORY_ENABLED}), 200
 
 if __name__ == '__main__':
     print("Iniciando el servidor Flask en el puerto 65535...")
